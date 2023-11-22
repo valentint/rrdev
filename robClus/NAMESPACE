@@ -1,0 +1,51 @@
+useDynLib(robClus, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+
+##  exportPattern("^[[:alpha:]]+")
+
+importFrom("stats", "mad", "median", "na.omit", "rnorm", "runif")
+importFrom("utils", "flush.console", "setTxtProgressBar",
+             "txtProgressBar")
+importFrom("grDevices", "dev.interactive", "n2mfrow", "grey")
+importFrom("graphics", "barplot", "layout", "legend", "lines", "par", "text")
+importFrom("graphics", "axis", "box", "mtext", "plot.new", "points", "title")
+importFrom("graphics", "abline", "polygon")
+importFrom("stats", "heatmap", "princomp", "qchisq", "cov")
+ importFrom("stats", "mahalanobis", "qnorm", "quantile", "sd")
+  
+importFrom("MASS", "mvrnorm")
+importFrom("mvtnorm", "rmvnorm")
+importFrom("parallel", "detectCores", "makeCluster", "stopCluster")
+import("foreach", "foreach")
+import(doParallel)
+
+export(
+    simula.rlg,
+    simula.tclust,
+    rlg,
+#    print.rlg,
+    plot.rlg,
+    tclust2,
+    print.tclust2,
+    plot.tclust2,
+    bfact,
+    print.bfact,
+    summary.bfact,
+    plot.bfact,
+    plot_bfact_p2,
+    plot_bfact_p3,
+    ctlcurves2,
+    print.ctlcurves2,
+    plot.ctlcurves2
+)
+
+#   S3method (print, rlg)
+S3method (plot, rlg)
+S3method (print, tclust2)
+S3method (plot, tclust2)
+S3method (print, bfact)
+S3method (summary, bfact)
+S3method (plot, bfact)
+S3method (print, ctlcurves2)
+S3method (plot, ctlcurves2)
+
