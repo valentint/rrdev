@@ -17,7 +17,7 @@ To install the latest stable development version from GitHub, you can
 pull this repository and install it using
 
     ## install.packages("remotes")
-    remotes::install_github("valentint/rrdev", subdir="robClus"
+    remotes::install_github("valentint/rrdev", subdir="robClus")
 
 Of course, if you have already installed `remotes`, you can skip the
 first line (I have commented it out).
