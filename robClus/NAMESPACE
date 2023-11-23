@@ -36,7 +36,10 @@ export(
     plot_bfact_p3,
     ctlcurves2,
     print.ctlcurves2,
-    plot.ctlcurves2
+    plot.ctlcurves2,
+    
+    tclust_c1,
+    tclust_c2
 )
 
 #   S3method (print, rlg)
