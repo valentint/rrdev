@@ -224,7 +224,7 @@ arma::mat restr2Deter(arma::mat autovalues, arma::vec ni_ini, double factor_e, d
     //arma::mat nis(k, p);
     //nis.each_col() = ni_ini;
     
-    Rcout << "Entering restr2Deter" << std::endl;
+//    Rcout << "Entering restr2Deter" << std::endl;
 
     if(p == 1)
         return restr2Eigenv(autovalues, ni_ini, factor_e, zero_tol);
@@ -262,7 +262,7 @@ arma::mat restr2Deter(arma::mat autovalues, arma::vec ni_ini, double factor_e, d
 //    dfin.print("This is dfin");
 //    diagmat(dfin).print("This is the diag matrix of dfin");
     
-    Rcout << "Exiting restr2Deter" << std::endl;
+//    Rcout << "Exiting restr2Deter" << std::endl;
 	return autovalues_det * diagmat(dfin);      							
 }
 
@@ -291,8 +291,8 @@ void fRestr(iteration &iter, params &pa) {
     if(!pa.deterC)
         d = restr2Eigenv(d, iter.size, pa.restr_fact, pa.zero_tol);
     else {
-        iter.size.print("Autovalues size");
-        d.print("Autovalues to be restricted");
+        // iter.size.print("Autovalues size");
+        // d.print("Autovalues to be restricted");
         d = restr2Deter(d, iter.size, pa.restr_fact, pa.zero_tol);
     }
     
