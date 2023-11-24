@@ -2,8 +2,12 @@ Package: robClus
 Type: Package
 Encoding: UTF-8
 Title: Robust Clustering Based on Trimming
-Version: 2.0-1
-Author: Javier Crespo Guerrero, Luis Angel García Escudero, Agustín Mayo Iscar
+Version: 2.0-2
+Authors@R: c(person("Valentin", "Todorov", role = c("aut", "cre"), email = "valentin@todorov.at", comment=c(ORCID = "0000-0003-4215-0245"))
+         , person("Javier", "Crespo Guerrero", role = "aut")
+         , person("Luis Angel", "García Escudero", role = "aut")
+         , person("Agustín", "Mayo Iscar", role = "aut")
+          )
 Maintainer: Valentin Todorov <valentin@todorov.at>
 Description: Provides functions for robust trimmed clustering. The methods are 
     described in Garcia-Escudero (2008) <doi:10.1214/07-AOS515>, 
@@ -14,6 +18,10 @@ Imports: Rcpp (>= 1.0.7), doParallel, parallel, foreach, MASS, mvtnorm
 LazyLoad: yes
 License: GPL (>=3)
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 7.2.3
 NeedsCompilation: yes
+RoxygenNote: 7.2.3
+Author: Valentin Todorov [aut, cre] (<https://orcid.org/0000-0003-4215-0245>),
+  Javier Crespo Guerrero [aut],
+  Luis Angel García Escudero [aut],
+  Agustín Mayo Iscar [aut]
 Packaged: 2023-05-16 16:21:23 UTC; javie
