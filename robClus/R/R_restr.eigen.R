@@ -106,23 +106,19 @@
 	t (m * (d < m) + d * (d >= m) * (d <= restr.fact * m) + (restr.fact * m) * (d > restr.fact * m))	##	the return value
 }
 
-## 2do: replace .multbyrow (a, b), by a %*% diag (b)
-.multbyrow <- function (a, b) t (t(a) * as.numeric (b))		##	auxiliary function, performing an operation (*) row- rather than column-wise
-
-.restr2_deter_ <- function (autovalues, ni.ini, restr.fact, zero.tol = 1e-16)
+.restr2_deter_ <- function(autovalues, ni.ini, restr.fact, zero.tol=1e-16)
 {
-				###### function parameters:
-				###### autovalues: matrix containing eigenvalues
-				###### ni.ini: current sample size of the clusters
-				###### factor: the factor parameter in tclust program
-				###### some initializations
+    ###### function parameters:
+    ###### autovalues: matrix containing eigenvalues
+    ###### ni.ini: current sample size of the clusters
+    ###### factor: the factor parameter in tclust program
+    ###### some initializations
 
 	p = nrow (autovalues)
-
-	if (p == 1)
-		return  (.restr2_eigenv (autovalues, ni.ini, restr.fact, zero.tol))
-
 	K = ncol (autovalues)
+
+	if(p == 1)
+		return (.restr2_eigenv (autovalues, ni.ini, restr.fact, zero.tol))
 
 	es = apply (autovalues, 2, prod)
 
@@ -137,6 +133,7 @@
 	d = t(es)	#### --> dim (d) = 1 x K (has once been "d <- matrix (es, nrow = 1)")
 																				#n	put this block into a function (for improved readability)
 	autovalues_det <- .HandleSmallEv (autovalues, zero.tol)						##	handling close to zero eigenvalues here
+
 print(autovalues)
 print(autovalues_det)
 
@@ -162,16 +159,18 @@ print(autovalues_det)
 #cat ("\nfin:\t", dfin, "\n")
 
 
-	ret <- autovalues_det %*% diag(as.numeric(dfin))      							## autovalues_det %*% diag (dfin)
-    ret
+	return(autovalues_det %*% diag(as.numeric(dfin))) 							## autovalues_det %*% diag (dfin)
 }
 
-.HandleSmallEv <- function (autovalues, zero.tol)							#n	a part of .restr2_deter_, which handles almost zero eigenvalues
-{	##	handling close to zero eigenvalues here
-				######  populations with one eigenvalue close to 0 are very close to be contained in a hyperplane
-				######  autovalues2 is equal to autovalues except for the columns corresponding to populations close to singular
-				######  for these populations we put only one eigenvalue close to 0 and the rest far from 0   	
+.HandleSmallEv <- function (autovalues, zero.tol)							    #n	a part of .restr2_deter_, which handles almost zero eigenvalues
+{	
+
+    ##	handling close to zero eigenvalues here
+    ######  populations with one eigenvalue close to 0 are very close to be contained in a hyperplane
+    ######  autovalues2 is equal to autovalues except for the columns corresponding to populations close to singular
+    ######  for these populations we put only one eigenvalue close to 0 and the rest far from 0   	
 	
+	p <- nrow (autovalues)													#n
 	autovalues[autovalues <= zero.tol] <- zero.tol							#n	"<= zero.tol" for checking for zero
 
 	mi <- apply(autovalues, 2, min)											##	the minimum eigenvalue of each cluster
@@ -197,11 +196,10 @@ print(autovalues_det)
 
 	det = apply(autovalues, 2, prod)											#n	the new determinants
 
-				######	autovalues_det contains the autovalues corrected by the determinant
-				######	the product of the eigenvalues of each column in autovalues_det is equal to 1
+	######	autovalues_det contains the autovalues corrected by the determinant
+	######	the product of the eigenvalues of each column in autovalues_det is equal to 1
 
-	p <- nrow (autovalues)													#n
-	autovalues_det <- autovalues %*% diag(det^(-1/p))  					#n	
+	autovalues_det <- autovalues %*% diag(det^(-1/p))  					
 	return (autovalues_det)
 }
 
