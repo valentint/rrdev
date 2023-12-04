@@ -90,18 +90,18 @@ x <- M5data[, 1:2]
 c1 <- tclust2(x, k=3, alpha=0.1, restr.fact=50)
 c2 <- tclust(x, k=3, alpha=0.1, restr.fact=50)
 (adj <- adjustedRandIndex(c1$cluster, c2$cluster))
-#> [1] 1
+#> [1] 0.9803242
 
 ## Compare the computational time of tclust() and tclust2()
 microbenchmark(tclust2(x, k=3, alpha=0.1, restr.fact=50),
                tclust(x, k=3, alpha=0.1, restr.fact=50), times=10)
 #> Unit: milliseconds
 #>                                             expr      min       lq     mean
-#>  tclust2(x, k = 3, alpha = 0.1, restr.fact = 50) 117.5883 125.8065 136.3524
-#>   tclust(x, k = 3, alpha = 0.1, restr.fact = 50) 337.7894 343.2664 377.0574
+#>  tclust2(x, k = 3, alpha = 0.1, restr.fact = 50) 137.7361 139.8446 143.1430
+#>   tclust(x, k = 3, alpha = 0.1, restr.fact = 50) 441.7993 443.2767 451.7707
 #>    median       uq      max neval
-#>  135.3692 150.5599 157.4066    10
-#>  350.0780 392.8084 525.7191    10
+#>  142.7377 144.6260 154.8022    10
+#>  452.5319 459.8815 462.8124    10
 ```
 
 ## Example 3: Parallel computing
@@ -131,14 +131,44 @@ x <- rbind(mvtnorm::rmvnorm(ni[1], center * 0,   sigma),
 
 (ptime_par <- system.time({c1 <- tclust2(x, k=3, alpha=0.1, restr.fact=50, parallel=TRUE)})[3])
 #> elapsed 
-#>   22.65
+#>   17.87
 (ptime_seq <- system.time({c2 <- tclust2(x, k=3, alpha=0.1, restr.fact=50, parallel=FALSE)})[3])
 #> elapsed 
-#>   53.11
+#>   43.38
 ```
 
 On my laptop with 12 cores and p=100 the parallel version is more than
 twice faster.
 
 Please note, that if you repeat the example with, say, p=2, the parallel
-version will be much slower
+version will be much slower.
+
+## Example 4: Mixture modelling
+
+To illustrate the option for mixture modeling in the new tclust function
+we will consider the well-known Fisher IRIS data set and as in McLachlan
+and peel (2000) will try to model only the “virginica” class. The
+mixture modelling option is selected by setting `opt="MIXT"`
+(alternative to `opt="HARD"` which is the default).
+
+``` r
+library(robClus)        # for tclust2()
+library(mclust)         # for adjustedRandIndex()    
+
+x <- iris[iris[,5]=="virginica", 1:4]
+c1 <- tclust2(x, k=2, alpha=0.1, nstart=1000, opt="HARD")
+c2 <- tclust2(x, k=2, alpha=0.1, nstart=1000, opt="MIXT")
+
+(adj1 <- adjustedRandIndex(c1$cluster, c2$cluster))
+#> [1] 1
+
+pa <- par (mfrow = c (1, 2))
+plot (c1, main = "(a) Classification likelihood")
+plot (c2, main = "(b) Mixture likelihood")
+```
+
+![](README-example-4-1.png)<!-- -->
+
+``` r
+par (pa)
+```
