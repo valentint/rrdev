@@ -1,0 +1,9 @@
+..Rcheck
+
+^README\.Rmd$
+
+^\.github$
+
+^docs$
+
+[.]png$

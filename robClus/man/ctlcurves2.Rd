@@ -32,9 +32,9 @@ Tracing level \code{2} gives additional information on the current iteration.}
 \value{
 The function returns an S3 object of type \code{ctlcurves2} containing the following components:
 \itemize{
- \item{\code{par}}{ A list containing all the parameters passed to this function }
-\item{\code{obj}}{ An array containing the objective functions values of each computed cluster-solution }
-\item{\code{min.weights}}{ An array containing the minimum cluster weight of each computed cluster-solution }
+ \item \code{par} A list containing all the parameters passed to this function 
+\item \code{obj}  An array containing the objective functions values of each computed cluster-solution 
+\item \code{min.weights} An array containing the minimum cluster weight of each computed cluster-solution 
  }
 }
 \description{

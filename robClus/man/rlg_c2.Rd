@@ -15,7 +15,7 @@ Each component of vector \code{d} indicates the intrinsic dimension of the affin
 where observations on that cluster are going to be clustered. All the elements 
 of vector \code{d} should be smaller than the problem dimension minus 1.}
 
-\item{cluster}{Rcpp::NumericVector  A numeric vector of size #code{n} containing 
+\item{cluster}{Rcpp::NumericVector  A numeric vector of size \code{n} containing 
 the cluster assignment for each observation. Cluster names are integer numbers}
 
 \item{alpha}{double, The proportion of observations to be trimmed.}

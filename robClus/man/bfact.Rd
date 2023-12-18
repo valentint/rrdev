@@ -16,16 +16,16 @@ discriminant factor larger than \code{log(threshold)} is considered a "doubtful"
 \value{
 The function returns an S3 object of type \code{bfact} containing the following components:
 \itemize{
-   \item{x}{ A \code{tclust2} object. }
-\item{ylimmin}{ A minimum y-limit calculated for plotting purposes. }
-\item{ind}{ The actual cluster assignment. }
-\item{ind2}{ The second most likely cluster assignment for each observation. }
-\item{lik}{ The (weighted) likelihood of the actual cluster assignment of each observation. }
-\item{lik2}{ The (weighted) likelihood of the second best cluster assignment of each observation. }
-\item{assignfact}{ The factor \code{log(disc/disc2)}. }
-\item{threshold}{ The threshold used for deciding whether \code{assignfact} indicates a "doubtful" assignment. }
-\item{mean.bfact}{ A vector of length \code{k + 1} containing the mean discriminant 
-     factors for each cluster (including the outliers). }
+     \item \code{x} A \code{tclust2} object. 
+     \item \code{ylimmin} A minimum y-limit calculated for plotting purposes. 
+    \item \code{ind} The actual cluster assignment. 
+    \item \code{ind2} The second most likely cluster assignment for each observation. 
+    \item \code{lik} The (weighted) likelihood of the actual cluster assignment of each observation. 
+    \item \code{lik2} The (weighted) likelihood of the second best cluster assignment of each observation. 
+    \item \code{assignfact} The factor \code{log(disc/disc2)}. 
+    \item \code{threshold} The threshold used for deciding whether \code{assignfact} indicates a "doubtful" assignment. 
+    \item \code{mean.bfact} A vector of length \code{k + 1} containing the mean discriminant 
+     factors for each cluster (including the outliers). 
  }
 }
 \description{

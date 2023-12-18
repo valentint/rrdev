@@ -18,29 +18,29 @@
 #' @section Further Arguments:
 #'
 #' \itemize{
-#'  \item{\code{xlab, ylab, xlim, ylim, pch, col}} {Arguments passed to \code{plot()}}.
-#'  \item{\code{main}} {The title of the plot. Use \code{"/p"} for displaying the chosen parameters 
-#'      \code{alpha} and \code{k} or \code{"/r"} for plotting the chosen restriction.}
-#'  \item{\code{main.pre}} {An optional string which is added to the plot's caption.}
-#'  \item{\code{sub}} {A string specifying the subtitle of the plot. Use \code{"/p"} (default) for 
+#'  \item \code{xlab, ylab, xlim, ylim, pch, col} Arguments passed to \code{plot()}.
+#'  \item \code{main} The title of the plot. Use \code{"/p"} for displaying the chosen parameters 
+#'      \code{alpha} and \code{k} or \code{"/r"} for plotting the chosen restriction.
+#'  \item \code{main.pre} An optional string which is added to the plot's caption.
+#'  \item \code{sub} A string specifying the subtitle of the plot. Use \code{"/p"} (default) for 
 #'  displaying the chosen parameters \code{alpha} and \code{k}, \code{"/r"} for plotting 
-#'  the chosen restriction and \code{"/pr"} for both. }
-#'  \item{\code{sub1}} {A secondary (optional) subtitle.}
-#'  \item{\code{labels}} {A string specifying the type of labels to be drawn. Either 
+#'  the chosen restriction and \code{"/pr"} for both. 
+#'  \item \code{sub1} A secondary (optional) subtitle.
+#'  \item \code{labels} A string specifying the type of labels to be drawn. Either 
 #'      \code{labels="none"} (default), \code{labels="cluster"} or \code{labels="observation"} 
-#'      can be specified. If specified, parameter \code{pch} is ignored.}
-#'  \item{\code{text}} {A vector of length n (the number of observations) containing 
+#'      can be specified. If specified, parameter \code{pch} is ignored.
+#'  \item \code{text} A vector of length n (the number of observations) containing 
 #'      strings which are used as labels for each observation. If specified, 
-#'      the parameters \code{labels} and \code{pch} are ignored.}
-#'  \item{\code{by.cluster}} {Logical value indicating whether parameters 
-#'      \code{pch} and \code{col} refer to observations (FALSE) or clusters (TRUE).}
-#'  \item{\code{jitter.y}} {Logical value, specifying whether the drawn values shall be 
-#'      jittered in y-direction for better visibility of structures in 1 dimensional data.}
-#'  \item{\code{tol}} {The tolerance interval. 95\% tolerance ellipsoids (assuming normality) 
-#'      are plotted by default.}
-#'  \item{\code{tol.col, tol.lty, tol.lwd}} {Vectors of length k or 1 containing 
+#'      the parameters \code{labels} and \code{pch} are ignored.
+#'  \item \code{by.cluster} Logical value indicating whether parameters 
+#'      \code{pch} and \code{col} refer to observations (FALSE) or clusters (TRUE).
+#'  \item \code{jitter.y} Logical value, specifying whether the drawn values shall be 
+#'      jittered in y-direction for better visibility of structures in 1 dimensional data.
+#'  \item \code{tol} The tolerance interval. 95\% tolerance ellipsoids (assuming normality) 
+#'      are plotted by default.
+#'  \item \code{tol.col, tol.lty, tol.lwd} Vectors of length k or 1 containing 
 #'      the \code{col}, \code{lty} and \code{lwd} arguments for the tolerance 
-#'      ellipses/lines.}
+#'      ellipses/lines.
 #' }
 #'
 #' @examples

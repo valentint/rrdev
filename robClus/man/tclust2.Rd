@@ -13,6 +13,7 @@ tclust2(
   niter1 = 3,
   niter2 = 20,
   nkeep = 5,
+  iter.max,
   equal.weights = FALSE,
   restr = c("eigen", "deter"),
   restr.fact = 12,
@@ -41,7 +42,13 @@ tclust2(
 \code{nkeep} solutions kept for further iteration. The concentration steps are 
 stopped, whenever two consecutive steps lead to the same data partition.}
 
-\item{nkeep}{The number of iterated initializations (after niter1 concentration steps) with the best values in the target function that are kept for further iterations}
+\item{nkeep}{The number of iterated initializations (after niter1 concentration 
+steps) with the best values in the target function that are kept for further iterations}
+
+\item{iter.max}{(deprecated, use the combination \code{nkeep, niter1 and niter2}) 
+The maximum number of concentration steps to be performed.
+The concentration steps are stopped, whenever two consecutive steps lead
+to the same data partition.}
 
 \item{equal.weights}{A logical value, specifying whether equal cluster weights 
 shall be considered in the concentration and assignment steps.}
@@ -155,11 +162,17 @@ Cluster components with similar sizes are favouring when considering \code{equal
 
 }
 \references{
-Fritz, H.; Garcia-Escudero, L.A.; Mayo-Iscar, A. (2012), "tclust: An R Package for a Trimming Approach to Cluster Analysis". Journal of Statistical Software, 47(12), 1-26. URL http://www.jstatsoft.org/v47/i12/
+Fritz, H.; Garcia-Escudero, L.A.; Mayo-Iscar, A. (2012), "tclust: An R Package 
+ for a Trimming Approach to Cluster Analysis". Journal of Statistical Software, 
+ 47(12), 1-26. URL http://www.jstatsoft.org/v47/i12/
 
-Garcia-Escudero, L.A.; Gordaliza, A.; Matran, C. and Mayo-Iscar, A. (2008), "A General Trimming Approach to Robust Cluster Analysis". Annals of Statistics, Vol.36, 1324-1345.  
+Garcia-Escudero, L.A.; Gordaliza, A.; Matran, C. and Mayo-Iscar, A. (2008), 
+ "A General Trimming Approach to Robust Cluster Analysis". Annals of Statistics, 
+ Vol.36, 1324-1345.  
 
-García-Escudero, L. A., Gordaliza, A., & Mayo-Íscar, A. (2014). A constrained robust proposal for mixture modeling avoiding spurious solutions. Advances in Data Analysis and Classification, 27-43.
+García-Escudero, L. A., Gordaliza, A. and Mayo-Íscar, A. (2014). A constrained 
+ robust proposal for mixture modeling avoiding spurious solutions. 
+ Advances in Data Analysis and Classification, 27-43.
 }
 \author{
 Javier Crespo Guerrero, Luis Angel Garcia Escudero, Agustin Mayo Iscar.

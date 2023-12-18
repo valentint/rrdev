@@ -1,4 +1,4 @@
-//  Rcpp::compileAttributes("C:/users/valen/onedrive/myrepo/R/robClus")
+//  Rcpp::compileAttributes("C:/users/valen/onedrive/myrepo/rrdev/robClus")
 
 #include <RcppArmadillo.h>
 
@@ -244,7 +244,7 @@ Rcpp::List rlg_c1(Rcpp::NumericMatrix x, Rcpp::NumericVector d, double alpha = 0
 //'  Each component of vector \code{d} indicates the intrinsic dimension of the affine subspace 
 //'  where observations on that cluster are going to be clustered. All the elements 
 //'  of vector \code{d} should be smaller than the problem dimension minus 1.
-//' @param cluster Rcpp::NumericVector  A numeric vector of size #code{n} containing 
+//' @param cluster Rcpp::NumericVector  A numeric vector of size \code{n} containing 
 //'  the cluster assignment for each observation. Cluster names are integer numbers 
 //   from 1 to \code{k}, 0 indicates trimmed observations.
 //' @param alpha double, The proportion of observations to be trimmed.

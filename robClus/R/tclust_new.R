@@ -1,4 +1,4 @@
-##  roxygen2::roxygenise("C:/users/valen/onedrive/myrepo/R/robClus", load_code=roxygen2:::load_installed)
+##  roxygen2::roxygenise("C:/users/valen/onedrive/myrepo/rrdev/robClus", load_code=roxygen2:::load_installed)
 
 #'
 #' TCLUST method for robust clustering
@@ -20,7 +20,12 @@
 #' @param niter2 The maximum number of concentration steps to be performed for the 
 #'  \code{nkeep} solutions kept for further iteration. The concentration steps are 
 #'  stopped, whenever two consecutive steps lead to the same data partition.
-#' @param nkeep The number of iterated initializations (after niter1 concentration steps) with the best values in the target function that are kept for further iterations
+#' @param nkeep The number of iterated initializations (after niter1 concentration 
+#'  steps) with the best values in the target function that are kept for further iterations
+#' @param iter.max (deprecated, use the combination \code{nkeep, niter1 and niter2}) 
+#'  The maximum number of concentration steps to be performed.
+#'  The concentration steps are stopped, whenever two consecutive steps lead
+#'  to the same data partition.
 #' @param equal.weights A logical value, specifying whether equal cluster weights 
 #'  shall be considered in the concentration and assignment steps.
 #' @param restr Restriction type (eigenvalues or determinant)
@@ -105,11 +110,17 @@
 #' 
 #' @references 
 #' 
-#' Fritz, H.; Garcia-Escudero, L.A.; Mayo-Iscar, A. (2012), "tclust: An R Package for a Trimming Approach to Cluster Analysis". Journal of Statistical Software, 47(12), 1-26. URL http://www.jstatsoft.org/v47/i12/
+#' Fritz, H.; Garcia-Escudero, L.A.; Mayo-Iscar, A. (2012), "tclust: An R Package 
+#'  for a Trimming Approach to Cluster Analysis". Journal of Statistical Software, 
+#'  47(12), 1-26. URL http://www.jstatsoft.org/v47/i12/
 #' 
-#' Garcia-Escudero, L.A.; Gordaliza, A.; Matran, C. and Mayo-Iscar, A. (2008), "A General Trimming Approach to Robust Cluster Analysis". Annals of Statistics, Vol.36, 1324-1345.  
+#' Garcia-Escudero, L.A.; Gordaliza, A.; Matran, C. and Mayo-Iscar, A. (2008), 
+#'  "A General Trimming Approach to Robust Cluster Analysis". Annals of Statistics, 
+#'  Vol.36, 1324-1345.  
 #'
-#' García-Escudero, L. A., Gordaliza, A., & Mayo-Íscar, A. (2014). A constrained robust proposal for mixture modeling avoiding spurious solutions. Advances in Data Analysis and Classification, 27-43. 
+#' García-Escudero, L. A., Gordaliza, A. and Mayo-Íscar, A. (2014). A constrained 
+#'  robust proposal for mixture modeling avoiding spurious solutions. 
+#'  Advances in Data Analysis and Classification, 27-43. 
 #' 
 #' @export
 #'
@@ -123,7 +134,7 @@
 #'  plot(clus)
 #' 
 #'
-tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5,
+tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, iter.max,
                    equal.weights=FALSE, restr=c("eigen", "deter"), restr.fact=12, opt="HARD",
                    center=FALSE, scale=FALSE, store_x=TRUE, 
                    parallel=FALSE, n.cores=-1, 
@@ -132,7 +143,12 @@ tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5,
     restr <- match.arg(restr)
     restrC <- 0
     deterC <- restr == "deter"
-    
+
+    if(!missing(iter.max)) {
+        warning("The parameter 'iter.max' is deprecated, please read the help and use the combination of 'niter1', 'niter2', 'nkeep'.")
+        niter1 <- iter.max
+    }
+        
 	parlist <- list(k=k, alpha=alpha, nstart=nstart, niter1=niter1, niter2=niter2, nkeep=nkeep, 
         restr=restr, restr.C=restrC, deter.C=deterC, restr.fact=restr.fact, 
         equal.weights=equal.weights, center=center, scale=scale,

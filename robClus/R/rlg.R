@@ -3,7 +3,7 @@
 #' Robust Linear Grouping
 #' 
 #' @description rlg searches for clusters around affine subspaces of dimensions given by 
-#'  vector d (the length of that vector is the number of clusters). For instance #code{d=c(1,2)} 
+#'  vector d (the length of that vector is the number of clusters). For instance \code{d=c(1,2)} 
 #'  means that we are clustering around a line and a plana. For robustifying the estimation, 
 #'  a proportion alpha of observations is trimmed. In particular, the trimmed k-means 
 #'  method is represented by the rlg method, if d=c(0,0,..0) (a vector of length 
