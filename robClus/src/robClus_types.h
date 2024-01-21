@@ -16,7 +16,8 @@ struct params
   double zero_tol;    // Tolerance that substitutes 0 (to avoid some numerical issues)
   int restrC;         // Restriction type (0 = eigenvalues or determinants)  
   bool deterC;        // Determinants restriction  
-  double restr_fact;  // Level of constraint of the eigenvalues
+  double restr_fact;  // Level of constraint (of eigenvalues or determinants)
+  double cshape;      // Level of constraint of the eigenvalues when deterC=true
   Rcpp::String opt;   // Model of estimate, can be "HARD" for hard assignment or "MIXTURE" for mixture assignment
 };
 

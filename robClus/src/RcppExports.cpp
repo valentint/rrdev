@@ -42,8 +42,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // tclust_c1
-Rcpp::List tclust_c1(arma::mat x, int k, double alpha, int restrC, bool deterC, double restr_fact, int niter1, Rcpp::String opt, bool equal_weights, double zero_tol);
-RcppExport SEXP _robClus_tclust_c1(SEXP xSEXP, SEXP kSEXP, SEXP alphaSEXP, SEXP restrCSEXP, SEXP deterCSEXP, SEXP restr_factSEXP, SEXP niter1SEXP, SEXP optSEXP, SEXP equal_weightsSEXP, SEXP zero_tolSEXP) {
+Rcpp::List tclust_c1(arma::mat x, int k, double alpha, int restrC, bool deterC, double restr_fact, double cshape, int niter1, Rcpp::String opt, bool equal_weights, double zero_tol);
+RcppExport SEXP _robClus_tclust_c1(SEXP xSEXP, SEXP kSEXP, SEXP alphaSEXP, SEXP restrCSEXP, SEXP deterCSEXP, SEXP restr_factSEXP, SEXP cshapeSEXP, SEXP niter1SEXP, SEXP optSEXP, SEXP equal_weightsSEXP, SEXP zero_tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -53,17 +53,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type restrC(restrCSEXP);
     Rcpp::traits::input_parameter< bool >::type deterC(deterCSEXP);
     Rcpp::traits::input_parameter< double >::type restr_fact(restr_factSEXP);
+    Rcpp::traits::input_parameter< double >::type cshape(cshapeSEXP);
     Rcpp::traits::input_parameter< int >::type niter1(niter1SEXP);
     Rcpp::traits::input_parameter< Rcpp::String >::type opt(optSEXP);
     Rcpp::traits::input_parameter< bool >::type equal_weights(equal_weightsSEXP);
     Rcpp::traits::input_parameter< double >::type zero_tol(zero_tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(tclust_c1(x, k, alpha, restrC, deterC, restr_fact, niter1, opt, equal_weights, zero_tol));
+    rcpp_result_gen = Rcpp::wrap(tclust_c1(x, k, alpha, restrC, deterC, restr_fact, cshape, niter1, opt, equal_weights, zero_tol));
     return rcpp_result_gen;
 END_RCPP
 }
 // tclust_c2
-iteration tclust_c2(arma::mat x, int k, arma::uvec cluster, double alpha, int restrC, bool deterC, double restr_fact, int niter2, Rcpp::String opt, bool equal_weights, double zero_tol);
-RcppExport SEXP _robClus_tclust_c2(SEXP xSEXP, SEXP kSEXP, SEXP clusterSEXP, SEXP alphaSEXP, SEXP restrCSEXP, SEXP deterCSEXP, SEXP restr_factSEXP, SEXP niter2SEXP, SEXP optSEXP, SEXP equal_weightsSEXP, SEXP zero_tolSEXP) {
+iteration tclust_c2(arma::mat x, int k, arma::uvec cluster, double alpha, int restrC, bool deterC, double restr_fact, double cshape, int niter2, Rcpp::String opt, bool equal_weights, double zero_tol);
+RcppExport SEXP _robClus_tclust_c2(SEXP xSEXP, SEXP kSEXP, SEXP clusterSEXP, SEXP alphaSEXP, SEXP restrCSEXP, SEXP deterCSEXP, SEXP restr_factSEXP, SEXP cshapeSEXP, SEXP niter2SEXP, SEXP optSEXP, SEXP equal_weightsSEXP, SEXP zero_tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -74,11 +75,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type restrC(restrCSEXP);
     Rcpp::traits::input_parameter< bool >::type deterC(deterCSEXP);
     Rcpp::traits::input_parameter< double >::type restr_fact(restr_factSEXP);
+    Rcpp::traits::input_parameter< double >::type cshape(cshapeSEXP);
     Rcpp::traits::input_parameter< int >::type niter2(niter2SEXP);
     Rcpp::traits::input_parameter< Rcpp::String >::type opt(optSEXP);
     Rcpp::traits::input_parameter< bool >::type equal_weights(equal_weightsSEXP);
     Rcpp::traits::input_parameter< double >::type zero_tol(zero_tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(tclust_c2(x, k, cluster, alpha, restrC, deterC, restr_fact, niter2, opt, equal_weights, zero_tol));
+    rcpp_result_gen = Rcpp::wrap(tclust_c2(x, k, cluster, alpha, restrC, deterC, restr_fact, cshape, niter2, opt, equal_weights, zero_tol));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -96,9 +98,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// tclust_restr2_deter
-arma::mat tclust_restr2_deter(arma::mat autovalues, arma::vec ni_ini, double factor_e, double zero_tol);
-RcppExport SEXP _robClus_tclust_restr2_deter(SEXP autovaluesSEXP, SEXP ni_iniSEXP, SEXP factor_eSEXP, SEXP zero_tolSEXP) {
+// tclust_restr2_deter_old
+arma::mat tclust_restr2_deter_old(arma::mat autovalues, arma::vec ni_ini, double factor_e, double zero_tol);
+RcppExport SEXP _robClus_tclust_restr2_deter_old(SEXP autovaluesSEXP, SEXP ni_iniSEXP, SEXP factor_eSEXP, SEXP zero_tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -106,7 +108,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type ni_ini(ni_iniSEXP);
     Rcpp::traits::input_parameter< double >::type factor_e(factor_eSEXP);
     Rcpp::traits::input_parameter< double >::type zero_tol(zero_tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(tclust_restr2_deter(autovalues, ni_ini, factor_e, zero_tol));
+    rcpp_result_gen = Rcpp::wrap(tclust_restr2_deter_old(autovalues, ni_ini, factor_e, zero_tol));
+    return rcpp_result_gen;
+END_RCPP
+}
+// tclust_restr2_deter
+arma::mat tclust_restr2_deter(arma::mat autovalues, arma::vec ni_ini, double restr_factor, double cshape, double zero_tol);
+RcppExport SEXP _robClus_tclust_restr2_deter(SEXP autovaluesSEXP, SEXP ni_iniSEXP, SEXP restr_factorSEXP, SEXP cshapeSEXP, SEXP zero_tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type autovalues(autovaluesSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type ni_ini(ni_iniSEXP);
+    Rcpp::traits::input_parameter< double >::type restr_factor(restr_factorSEXP);
+    Rcpp::traits::input_parameter< double >::type cshape(cshapeSEXP);
+    Rcpp::traits::input_parameter< double >::type zero_tol(zero_tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(tclust_restr2_deter(autovalues, ni_ini, restr_factor, cshape, zero_tol));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -126,10 +143,11 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_robClus_rlg_c1", (DL_FUNC) &_robClus_rlg_c1, 4},
     {"_robClus_rlg_c2", (DL_FUNC) &_robClus_rlg_c2, 5},
-    {"_robClus_tclust_c1", (DL_FUNC) &_robClus_tclust_c1, 10},
-    {"_robClus_tclust_c2", (DL_FUNC) &_robClus_tclust_c2, 11},
+    {"_robClus_tclust_c1", (DL_FUNC) &_robClus_tclust_c1, 11},
+    {"_robClus_tclust_c2", (DL_FUNC) &_robClus_tclust_c2, 12},
     {"_robClus_tclust_restr2_eigenv", (DL_FUNC) &_robClus_tclust_restr2_eigenv, 4},
-    {"_robClus_tclust_restr2_deter", (DL_FUNC) &_robClus_tclust_restr2_deter, 4},
+    {"_robClus_tclust_restr2_deter_old", (DL_FUNC) &_robClus_tclust_restr2_deter_old, 4},
+    {"_robClus_tclust_restr2_deter", (DL_FUNC) &_robClus_tclust_restr2_deter, 5},
     {"_robClus_tclust_HandleSmallEv", (DL_FUNC) &_robClus_tclust_HandleSmallEv, 2},
     {NULL, NULL, 0}
 };

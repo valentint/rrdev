@@ -12,6 +12,7 @@ tclust_c2(
   restrC = 0L,
   deterC = FALSE,
   restr_fact = 12,
+  cshape = 1e+10,
   niter2 = 20L,
   opt = "HARD",
   equal_weights = FALSE,
@@ -38,6 +39,8 @@ clusters with no observations when \code{equal_weights=FALSE}.}
 differences among group scatters in terms of eigenvalues ratio. Larger values 
 imply larger differences of group scatters, a value of 1 specifies the 
 strongest restriction.}
+
+\item{cshape}{Shape constraint}
 
 \item{niter2}{The maximum number of concentration steps to be performed for the 
 \code{nkeep} solutions kept for further iteration. The concentration steps are 

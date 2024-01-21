@@ -3,7 +3,7 @@
  *
  */
 
-//  Rcpp::compileAttributes("C:/users/valen/onedrive/myrepo/R/robClus")
+//  Rcpp::compileAttributes("C:/users/valen/onedrive/myrepo/rrdev/robClus")
 
 // #include <RcppCommon.h>
 // #include <RcppArmadillo.h>
@@ -42,6 +42,7 @@ namespace Rcpp {
       _["restrC"] = pa.restrC;
       _["deterC"] = pa.deterC;
       _["restr_fact"] = pa.restr_fact;
+      _["cshape"] = pa.cshape;
       _["opt"] = pa.opt;
   }
 }
@@ -88,6 +89,10 @@ arma::mat restr2Eigenv(arma::mat autovalues, arma::vec ni_ini, double factor_e, 
   arma::mat nis(k, p); 
   nis.each_col() = ni_ini;
 
+  //VT::20.01.2024: set any negative values in d to 0
+  arma::uvec idx = find(d < 0);
+  d.elem(idx).fill(0);
+  
   // d_ is the ordered set of values in which the restriction objective function change the definition
   // points in d_ correspond to the frontiers for the intervals in which this objective function has the same definition
   // ed is a set with the middle points of these intervals
@@ -213,7 +218,7 @@ arma::mat HandleSmallEv(arma::mat autovalues, double zero_tol)
  *
  * @returns matrix with constrained eigenvalues.
  */
-arma::mat restr2Deter(arma::mat autovalues, arma::vec ni_ini, double factor_e, double zero_tol)
+arma::mat restr2Deter_old(arma::mat autovalues, arma::vec ni_ini, double factor_e, double zero_tol)
 {
 
     // Initializations
@@ -232,7 +237,7 @@ arma::mat restr2Deter(arma::mat autovalues, arma::vec ni_ini, double factor_e, d
     arma::mat es = prod(autovalues, 0);
     if(arma::max(es(find(ni_ini))) <= zero_tol) {
         arma::mat aret(p, k, arma::fill::zeros);
-        aret.print("!!!! - restr2Deter() returning zeros!");
+        // aret.print("!!!! - restr2Deter() returning zeros!");
         return aret;
     }
     
@@ -267,6 +272,62 @@ arma::mat restr2Deter(arma::mat autovalues, arma::vec ni_ini, double factor_e, d
 }
 
 /**
+ * Apply restrictions to determinants.
+ *
+ * @param autovalues: p x k matrix containin eigenvalues.
+ * @param ni_ini: current sample size of the clusters.
+ * @param restr_factor: constraint level for the determinant constraints
+ * @param cshape: constraint level for the eigenvalues constraints, default is 1e10
+ * @param zero_tol: tolerance level.
+ *
+ * @returns matrix with constrained eigenvalues.
+ */
+arma::mat restr2Deter(arma::mat autovalues, arma::vec ni_ini, double restr_factor, double cshape, double zero_tol)
+{
+
+    // Initializations
+    int p = autovalues.n_rows;
+    int K = autovalues.n_cols;
+    arma::vec ni_ini_1 = {1};
+    
+    //  Rcout << "Entering restr2Deter2" << std::endl;
+
+    arma::uvec idx = find(autovalues < 1e-16);
+    autovalues.elem(idx).fill(0);
+    arma::mat autovalues_ = autovalues; 
+    
+    if(p == 1) return restr2Eigenv(autovalues, ni_ini, restr_factor, zero_tol);
+    for(int k = 0; k < K; k++)  {
+        autovalues_.col(k) = restr2Eigenv(autovalues.col(k), ni_ini_1, cshape, zero_tol);
+    }
+
+    arma::mat es = prod(autovalues_, 0);                        // apply(autovalues_, 2, prod)
+   
+    idx = find(es == 0);                                        // es[es==0] <- 1
+    es.elem(idx).fill(1);                                       // ...
+    arma::mat esmat(arma::pow(es, 1.0/p));
+    esmat.set_size(1, K);
+    arma::mat gm = autovalues_/repmat(esmat, p, 1);
+    arma::mat d = sum(autovalues/gm, 0)/p;
+    
+    idx = find_nan(d);                                           // d[is.nan(d)] <- 0
+    d.elem(idx).fill(0);                                         // ...
+    
+    arma::mat dfin = restr2Eigenv(d, ni_ini, pow(restr_factor, 1.0/p), zero_tol);
+    
+    // gm = gm * (gm > 0) + 1 * (gm == 0)
+    idx = find(gm < 0);                                         // gm[gm<0] <- 0
+    gm.elem(idx).fill(0);                                       // ...
+    idx = find(gm == 0);                                        // gm[gm==0] <- 1
+    gm.elem(idx).fill(1);                                       // ...
+
+    dfin.set_size(1, K);
+    dfin = repmat(dfin, p, 1);
+    
+	return dfin % gm;
+}
+
+/**
  * Manages constraints of a clustering stage.
  *
  * @param iter: a reference to the cluster information. Its values are modified.
@@ -293,7 +354,7 @@ void fRestr(iteration &iter, params &pa) {
     else {
         // iter.size.print("Autovalues size");
         // d.print("Autovalues to be restricted");
-        d = restr2Deter(d, iter.size, pa.restr_fact, pa.zero_tol);
+        d = restr2Deter(d, iter.size, pa.restr_fact, pa.cshape, pa.zero_tol);
     }
     
     // checking for singularity in all clusters.
@@ -600,6 +661,7 @@ void concentration_steps(int niter, arma::mat x, iteration &iter, params &pa)
 //'  differences among group scatters in terms of eigenvalues ratio. Larger values 
 //'  imply larger differences of group scatters, a value of 1 specifies the 
 //'  strongest restriction.
+//' @param cshape Shape constraint
 //' @param niter1 int, The number of concentration steps to be performed for the 
 //'     nstart initializations. 
 //' @param opt Define the target function to be optimized. A classification likelihood 
@@ -611,7 +673,7 @@ void concentration_steps(int niter, arma::mat x, iteration &iter, params &pa)
 ///' @export
 // [[Rcpp::export]]
 Rcpp::List tclust_c1(arma::mat x, int k, double alpha = 0.05,
-                     int restrC=0, bool deterC=false, double restr_fact = 12, 
+                     int restrC=0, bool deterC=false, double restr_fact = 12, double cshape=1e10, 
                      int niter1 = 3, Rcpp::String opt = "HARD",
                      bool equal_weights = false, double zero_tol = 1e-16)
 {
@@ -632,6 +694,7 @@ Rcpp::List tclust_c1(arma::mat x, int k, double alpha = 0.05,
   pa.restrC = restrC;
   pa.deterC = deterC;
   pa.restr_fact = restr_fact;
+  pa.cshape = cshape;
   pa.opt = opt;
 
   iteration iter;
@@ -667,6 +730,7 @@ Rcpp::List tclust_c1(arma::mat x, int k, double alpha = 0.05,
 //'  differences among group scatters in terms of eigenvalues ratio. Larger values 
 //'  imply larger differences of group scatters, a value of 1 specifies the 
 //'  strongest restriction.
+//' @param cshape Shape constraint
 //' @param niter2 The maximum number of concentration steps to be performed for the 
 //'  \code{nkeep} solutions kept for further iteration. The concentration steps are 
 //'  stopped, whenever two consecutive steps lead to the same data partition.
@@ -679,7 +743,7 @@ Rcpp::List tclust_c1(arma::mat x, int k, double alpha = 0.05,
 //' @export
 // [[Rcpp::export]]
 iteration tclust_c2(arma::mat x, int k, arma::uvec cluster, double alpha = 0.05,
-                     int restrC=0, bool deterC=false, double restr_fact = 12, 
+                     int restrC=0, bool deterC=false, double restr_fact = 12, double cshape=1e10,
                      int niter2 = 20, Rcpp::String opt = "HARD",
                      bool equal_weights = false, double zero_tol = 1e-16)
 {
@@ -712,6 +776,7 @@ iteration tclust_c2(arma::mat x, int k, arma::uvec cluster, double alpha = 0.05,
   pa.restrC = restrC;
   pa.deterC = deterC;
   pa.restr_fact = restr_fact;
+  pa.cshape = cshape;
   pa.opt = opt;
 
   iteration iter;
@@ -736,8 +801,13 @@ arma::mat tclust_restr2_eigenv(arma::mat autovalues, arma::vec ni_ini, double fa
 }
 
 // [[Rcpp::export]]
-arma::mat tclust_restr2_deter(arma::mat autovalues, arma::vec ni_ini, double factor_e=12, double zero_tol=1e-16) {
-    return restr2Deter(autovalues, ni_ini, factor_e, zero_tol);
+arma::mat tclust_restr2_deter_old(arma::mat autovalues, arma::vec ni_ini, double factor_e=12, double zero_tol=1e-16) {
+    return restr2Deter_old(autovalues, ni_ini, factor_e, zero_tol);
+}
+
+// [[Rcpp::export]]
+arma::mat tclust_restr2_deter(arma::mat autovalues, arma::vec ni_ini, double restr_factor=12, double cshape=1e10, double zero_tol=1e-16) {
+    return restr2Deter(autovalues, ni_ini, restr_factor, cshape, zero_tol);
 }
 
 // [[Rcpp::export]]

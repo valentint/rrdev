@@ -17,6 +17,7 @@ tclust2(
   equal.weights = FALSE,
   restr = c("eigen", "deter"),
   restr.fact = 12,
+  cshape = 1e+10,
   opt = "HARD",
   center = FALSE,
   scale = FALSE,
@@ -59,6 +60,10 @@ shall be considered in the concentration and assignment steps.}
 differences among group scatters in terms of eigenvalues ratio. Larger values 
 imply larger differences of group scatters, a value of 1 specifies the 
 strongest restriction.}
+
+\item{cshape}{constraint to apply to the shape matrices (\code{cshape >= 1}). 
+This options only works if \code{restr=='deter'}. In this case the default 
+value is \code{cshape=1e10} to ensure the procedure is (virtually) affine equivariant.}
 
 \item{opt}{Define the target function to be optimized. A classification likelihood 
 target function is considered if \code{opt="HARD"} and a mixture classification 

@@ -19,6 +19,8 @@ differences among group scatters in terms of eigenvalues ratio. Larger values
 imply larger differences of group scatters, a value of 1 specifies the 
 strongest restriction.}
 
+\item{cshape}{Shape constraint}
+
 \item{niter1}{int, The number of concentration steps to be performed for the 
 nstart initializations.}
 

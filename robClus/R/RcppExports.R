@@ -49,6 +49,7 @@ rlg_c2 <- function(x, d, cluster, alpha = 0.05, niter2 = 20L) {
 #'  differences among group scatters in terms of eigenvalues ratio. Larger values 
 #'  imply larger differences of group scatters, a value of 1 specifies the 
 #'  strongest restriction.
+#' @param cshape Shape constraint
 #' @param niter1 int, The number of concentration steps to be performed for the 
 #'     nstart initializations. 
 #' @param opt Define the target function to be optimized. A classification likelihood 
@@ -59,8 +60,8 @@ rlg_c2 <- function(x, d, cluster, alpha = 0.05, niter2 = 20L) {
 #' @param zero_tol The zero tolerance used. By default set to 1e-16.
 NULL
 
-tclust_c1 <- function(x, k, alpha = 0.05, restrC = 0L, deterC = FALSE, restr_fact = 12, niter1 = 3L, opt = "HARD", equal_weights = FALSE, zero_tol = 1e-16) {
-    .Call(`_robClus_tclust_c1`, x, k, alpha, restrC, deterC, restr_fact, niter1, opt, equal_weights, zero_tol)
+tclust_c1 <- function(x, k, alpha = 0.05, restrC = 0L, deterC = FALSE, restr_fact = 12, cshape = 1e10, niter1 = 3L, opt = "HARD", equal_weights = FALSE, zero_tol = 1e-16) {
+    .Call(`_robClus_tclust_c1`, x, k, alpha, restrC, deterC, restr_fact, cshape, niter1, opt, equal_weights, zero_tol)
 }
 
 #' Internal function for concentration steps (refinement) in tclust2
@@ -78,6 +79,7 @@ tclust_c1 <- function(x, k, alpha = 0.05, restrC = 0L, deterC = FALSE, restr_fac
 #'  differences among group scatters in terms of eigenvalues ratio. Larger values 
 #'  imply larger differences of group scatters, a value of 1 specifies the 
 #'  strongest restriction.
+#' @param cshape Shape constraint
 #' @param niter2 The maximum number of concentration steps to be performed for the 
 #'  \code{nkeep} solutions kept for further iteration. The concentration steps are 
 #'  stopped, whenever two consecutive steps lead to the same data partition.
@@ -88,16 +90,20 @@ tclust_c1 <- function(x, k, alpha = 0.05, restrC = 0L, deterC = FALSE, restr_fac
 #'  shall be considered in the concentration and assignment steps.
 #' @param zero_tol The zero tolerance used. By default set to 1e-16.
 #' @export
-tclust_c2 <- function(x, k, cluster, alpha = 0.05, restrC = 0L, deterC = FALSE, restr_fact = 12, niter2 = 20L, opt = "HARD", equal_weights = FALSE, zero_tol = 1e-16) {
-    .Call(`_robClus_tclust_c2`, x, k, cluster, alpha, restrC, deterC, restr_fact, niter2, opt, equal_weights, zero_tol)
+tclust_c2 <- function(x, k, cluster, alpha = 0.05, restrC = 0L, deterC = FALSE, restr_fact = 12, cshape = 1e10, niter2 = 20L, opt = "HARD", equal_weights = FALSE, zero_tol = 1e-16) {
+    .Call(`_robClus_tclust_c2`, x, k, cluster, alpha, restrC, deterC, restr_fact, cshape, niter2, opt, equal_weights, zero_tol)
 }
 
 tclust_restr2_eigenv <- function(autovalues, ni_ini, factor_e = 12, zero_tol = 1e-16) {
     .Call(`_robClus_tclust_restr2_eigenv`, autovalues, ni_ini, factor_e, zero_tol)
 }
 
-tclust_restr2_deter <- function(autovalues, ni_ini, factor_e = 12, zero_tol = 1e-16) {
-    .Call(`_robClus_tclust_restr2_deter`, autovalues, ni_ini, factor_e, zero_tol)
+tclust_restr2_deter_old <- function(autovalues, ni_ini, factor_e = 12, zero_tol = 1e-16) {
+    .Call(`_robClus_tclust_restr2_deter_old`, autovalues, ni_ini, factor_e, zero_tol)
+}
+
+tclust_restr2_deter <- function(autovalues, ni_ini, restr_factor = 12, cshape = 1e10, zero_tol = 1e-16) {
+    .Call(`_robClus_tclust_restr2_deter`, autovalues, ni_ini, restr_factor, cshape, zero_tol)
 }
 
 tclust_HandleSmallEv <- function(autovalues, zero_tol = 1e-16) {

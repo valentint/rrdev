@@ -33,6 +33,9 @@
 #'  differences among group scatters in terms of eigenvalues ratio. Larger values 
 #'  imply larger differences of group scatters, a value of 1 specifies the 
 #'  strongest restriction.
+#' @param cshape constraint to apply to the shape matrices (\code{cshape >= 1}). 
+#'  This options only works if \code{restr=='deter'}. In this case the default 
+#'  value is \code{cshape=1e10} to ensure the procedure is (virtually) affine equivariant. 
 #' @param zero_tol The zero tolerance used. By default set to 1e-16.
 #' @param center Optional centering of the data: a function or a vector of length p 
 #'  which can optionally be specified for centering x before calculation
@@ -135,7 +138,7 @@
 #' 
 #'
 tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, iter.max,
-                   equal.weights=FALSE, restr=c("eigen", "deter"), restr.fact=12, opt="HARD",
+                   equal.weights=FALSE, restr=c("eigen", "deter"), restr.fact=12, cshape=1e10, opt="HARD",
                    center=FALSE, scale=FALSE, store_x=TRUE, 
                    parallel=FALSE, n.cores=-1, 
                    zero_tol=1e-16, trace=0)  {
@@ -150,7 +153,7 @@ tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, i
     }
         
 	parlist <- list(k=k, alpha=alpha, nstart=nstart, niter1=niter1, niter2=niter2, nkeep=nkeep, 
-        restr=restr, restr.C=restrC, deter.C=deterC, restr.fact=restr.fact, 
+        restr=restr, restr.C=restrC, deter.C=deterC, restr.fact=restr.fact, cshape=cshape,
         equal.weights=equal.weights, center=center, scale=scale,
 #           fuzzy=fuzzy, m=m, 
         zero_tol=zero_tol, trace=trace, store_x=store_x)
@@ -212,7 +215,7 @@ tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, i
     obj.ini <- rep(0, nstart)               ## for containing best objective values
     
     for(j in 1:nstart) {
-      assig_obj <- tclust_c1(x, k, alpha, restrC=restrC, deterC=deterC, restr.fact, 
+      assig_obj <- tclust_c1(x, k, alpha, restrC=restrC, deterC=deterC, restr.fact, cshape=cshape,
         niter1, opt, equal.weights, zero_tol)                                                                   # niter1 steps!
       cluster.ini[[j]] <- assig_obj$cluster
       obj.ini[j] <- assig_obj$obj
@@ -245,7 +248,7 @@ tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, i
                             .combine = ifelse(trace, "comb", "c"),
                             .multicombine = TRUE,
                             .inorder = F) %dopar% {
-      assig_obj <- tclust_c1(x, k, alpha, restrC=restrC, deterC=deterC, restr.fact, 
+      assig_obj <- tclust_c1(x, k, alpha, restrC=restrC, deterC=deterC, restr.fact, cshape=cshape, 
         niter1, opt, equal.weights, zero_tol)
       
       list(assig_obj$cluster, assig_obj$obj)
@@ -279,7 +282,7 @@ tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, i
   best_iter_obj <- -Inf
   
   for(j in 1:nkeep){
-    iter <- tclust_c2(x, k, best_assig_list[[j]], alpha, restrC=restrC, deterC=deterC, restr.fact, 
+    iter <- tclust_c2(x, k, best_assig_list[[j]], alpha, restrC=restrC, deterC=deterC, restr.fact, cshape=cshape,
         niter2, opt, equal.weights, zero_tol=1e-16)
     
     if(iter$obj > best_iter_obj){
