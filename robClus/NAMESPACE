@@ -39,7 +39,11 @@ export(
     plot.ctlcurves2,
     
     tclust_c1,
-    tclust_c2
+    tclust_c2,
+    
+    tkmeans2,
+    print.tkmeans2,
+    plot.tkmeans2
 )
 
 #   S3method (print, rlg)
@@ -51,4 +55,6 @@ S3method (summary, bfact)
 S3method (plot, bfact)
 S3method (print, ctlcurves2)
 S3method (plot, ctlcurves2)
+S3method (print, tkmeans2)
+S3method (plot, tkmeans2)
 

@@ -2,6 +2,7 @@
 % Please edit documentation in R/plot.tclust2.R
 \name{plot.tclust2}
 \alias{plot.tclust2}
+\alias{plot.tkmeans2}
 \title{Plot Method for \code{tclust2} Objects}
 \usage{
 \method{plot}{tclust2}(x, ...)
@@ -13,9 +14,6 @@
 resulting plot (see section "Further Arguments").}
 }
 \description{
-The plot method for classes \code{tclust2}.
-}
-\details{
 One and two dimensional structures are treated separately (e.g. tolerance 
  intervals/ellipses are displayed). Higher dimensional structures are displayed 
  by plotting the two first Fisher's canonical coordinates (evaluated by 
@@ -24,6 +22,9 @@ One and two dimensional structures are treated separately (e.g. tolerance
  \code{plot.tclust.Nd} can be called with one or two-dimensional \code{tclust2}-objects 
  too. The function fails, if \code{store.x = FALSE} is specified in the \code{tclust2()} call, 
  because the original data matrix is required here.
+}
+\details{
+The plot method for classes \code{tclust2}.
 }
 \section{Further Arguments}{
 

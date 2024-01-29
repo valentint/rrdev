@@ -2,7 +2,10 @@
 #'
 #' The plot method for classes \code{tclust2}.
 #'
-#' One and two dimensional structures are treated separately (e.g. tolerance 
+#' @name plot.tclust2
+#' @aliases plot.tkmeans2
+
+#' @description One and two dimensional structures are treated separately (e.g. tolerance 
 #'  intervals/ellipses are displayed). Higher dimensional structures are displayed 
 #'  by plotting the two first Fisher's canonical coordinates (evaluated by 
 #'  \code{tclust::discr_coords}) and derived from the final cluster assignments 
@@ -68,6 +71,10 @@ function (x,  ...)
     .plot.tclust.2d (x, ...)
   else
     .plot.tclust.Nd (x, ...)
+}
+
+plot.tkmeans2 <- function(x,  ...) {
+	plot.tclust2(x, ...)
 }
 
 #######################

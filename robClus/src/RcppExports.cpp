@@ -139,6 +139,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tkmeans_c1
+Rcpp::List tkmeans_c1(arma::mat x, int k, double alpha, int niter1, double zero_tol, Rcpp::Nullable<Rcpp::NumericMatrix> points);
+RcppExport SEXP _robClus_tkmeans_c1(SEXP xSEXP, SEXP kSEXP, SEXP alphaSEXP, SEXP niter1SEXP, SEXP zero_tolSEXP, SEXP pointsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< int >::type niter1(niter1SEXP);
+    Rcpp::traits::input_parameter< double >::type zero_tol(zero_tolSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type points(pointsSEXP);
+    rcpp_result_gen = Rcpp::wrap(tkmeans_c1(x, k, alpha, niter1, zero_tol, points));
+    return rcpp_result_gen;
+END_RCPP
+}
+// tkmeans_c2
+iteration tkmeans_c2(arma::mat x, int k, arma::uvec cluster, double alpha, int niter2, double zero_tol);
+RcppExport SEXP _robClus_tkmeans_c2(SEXP xSEXP, SEXP kSEXP, SEXP clusterSEXP, SEXP alphaSEXP, SEXP niter2SEXP, SEXP zero_tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< arma::uvec >::type cluster(clusterSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< int >::type niter2(niter2SEXP);
+    Rcpp::traits::input_parameter< double >::type zero_tol(zero_tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(tkmeans_c2(x, k, cluster, alpha, niter2, zero_tol));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_robClus_rlg_c1", (DL_FUNC) &_robClus_rlg_c1, 4},
@@ -149,6 +181,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_robClus_tclust_restr2_deter_old", (DL_FUNC) &_robClus_tclust_restr2_deter_old, 4},
     {"_robClus_tclust_restr2_deter", (DL_FUNC) &_robClus_tclust_restr2_deter, 5},
     {"_robClus_tclust_HandleSmallEv", (DL_FUNC) &_robClus_tclust_HandleSmallEv, 2},
+    {"_robClus_tkmeans_c1", (DL_FUNC) &_robClus_tkmeans_c1, 6},
+    {"_robClus_tkmeans_c2", (DL_FUNC) &_robClus_tkmeans_c2, 6},
     {NULL, NULL, 0}
 };
 

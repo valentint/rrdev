@@ -21,6 +21,7 @@ namespace Rcpp {
     return Rcpp::List::create(
       _["obj"] = iter.obj,
       _["cluster"] = iter.cluster,
+      _["disttom"] = iter.disttom,
       _["size"] = iter.size,
       _["weights"] = iter.weights,
       _["centers"] = iter.centers,
@@ -60,6 +61,7 @@ Rcpp::List iter_to_list(iteration &iter)
       _["centers"] = iter.centers,
       _["cov"] = iter.cov,
       _["cluster"] = iter.cluster,
+      _["disttom"] = iter.disttom,
       _["obj"] = iter.obj,
       _["size"] = iter.size,
       _["weights"] = iter.weights,
@@ -384,8 +386,8 @@ void initClusters(arma::mat x, iteration &iter, params &pa)
 {
   arma::mat iter_center = arma::mat(pa.p, pa.k);        // Column ki stores the centers of cluster p
   arma::cube iter_sigma = arma::cube(pa.p, pa.p, pa.k); // Covariance matrix of each cluster
-  arma::vec size;                                      // Cluster sizes
-  arma::vec weights;                                         // Cluster weigths
+  arma::vec size;                                       // Cluster sizes
+  arma::vec weights;                                    // Cluster weigths
 
   arma::ivec idx = arma::randi(pa.k * (pa.p + 1), arma::distr_param(0, pa.n - 1));
 
@@ -511,23 +513,19 @@ void calcObj(arma::mat x, iteration &iter, params &pa)
  */
 void estimClustPar(arma::mat x, iteration &iter, params &pa)
 {
-  for (int ki = 0; ki < pa.k; ki++)
-  {
-    if (iter.size(ki) > pa.zero_tol)
-    {
-      iter.centers.row(ki) = (iter.posterior.col(ki).t() * x) / iter.size(ki);
-      // x centered
-      arma::mat X_c = x;
-      X_c.each_row() -= iter.centers.row(ki);
-      X_c.each_col() %= iter.posterior.col(ki);
-      iter.cov.slice(ki) = (X_c.t() * X_c) / iter.size(ki);
+    for (int ki = 0; ki < pa.k; ki++) {
+        if (iter.size(ki) > pa.zero_tol) {
+            iter.centers.row(ki) = (iter.posterior.col(ki).t() * x) / iter.size(ki);
+            // x centered
+            arma::mat X_c = x;
+            X_c.each_row() -= iter.centers.row(ki);
+            X_c.each_col() %= iter.posterior.col(ki);
+            iter.cov.slice(ki) = (X_c.t() * X_c) / iter.size(ki);
+        } else {
+            iter.centers.row(ki) = arma::mat(1, pa.p);
+            iter.cov.slice(ki) = arma::mat(pa.p, pa.p, arma::fill::eye);
+        }
     }
-    else
-    {
-      iter.centers.row(ki) = arma::mat(1, pa.p);
-      iter.cov.slice(ki) = arma::mat(pa.p, pa.p, arma::fill::eye);
-    }
-  }
 }
 
 /**
@@ -539,72 +537,72 @@ void estimClustPar(arma::mat x, iteration &iter, params &pa)
  */
 void findClustAssig(arma::mat x, iteration &iter, params &pa)
 {
-  int k = pa.k;
-  int n = pa.n;
-  int no_trim = pa.no_trim;
-  bool equal_weights = pa.equal_weights;
-  Rcpp::String opt = pa.opt;
-
-  // Rcout << "Entering findClustAssig()" << std::endl;
-  
-  arma::mat ll(n, k);
-  for(int ki = 0; ki < k; ki++)   {
-    // Rcout << "ki=" << ki << "=================" << std::endl;
-    // iter.cov.slice(ki).print();
+    int k = pa.k;
+    int n = pa.n;
+    int no_trim = pa.no_trim;
+    bool equal_weights = pa.equal_weights;
+    Rcpp::String opt = pa.opt;
     
-    ll.col(ki) = iter.weights(ki) * dmvnrm_arma_fast(x, iter.centers.row(ki), iter.cov.slice(ki));
-  }
+    // Rcout << "Entering findClustAssig()" << std::endl;
+    
+    arma::mat ll(n, k);
+    for(int ki = 0; ki < k; ki++)   {
+        // Rcout << "ki=" << ki << "=================" << std::endl;
+        // iter.cov.slice(ki).print();
+        
+        ll.col(ki) = iter.weights(ki) * dmvnrm_arma_fast(x, iter.centers.row(ki), iter.cov.slice(ki));
+    }
 
-  arma::uvec old_assig = iter.cluster;
-  arma::vec pre_z;
-  arma::uvec tc_set;
+    arma::uvec old_assig = iter.cluster;
+    arma::vec pre_z;
+    arma::uvec tc_set;
+    
+    if (opt == "HARD") {
+        pre_z = arma::max(ll, 1);
+    } else {
+        pre_z = arma::sum(ll, 1);
+    }
+    
+    // Rcout << "Before trimming ..." << std::endl;
 
-  if (opt == "HARD") {
-    pre_z = arma::max(ll, 1);
-  } else {
-    pre_z = arma::sum(ll, 1);
-  }
+    // Determine elements to trim
+    arma::uvec sorted_index = arma::sort_index(pre_z, "descending");
+    arma::uvec last_indexes = arma::linspace<arma::uvec>(no_trim, n - 1, n - no_trim);
+    arma::uvec obs_to_trim = sorted_index.elem(last_indexes);
+    pre_z.elem(obs_to_trim) = arma::zeros<arma::vec>(n - no_trim);
+    tc_set = pre_z > 0;
 
-  // Rcout << "Before trimming ..." << std::endl;
+    // Cluster assignment with trimming
+    // Rcout << "New cluster assignment ..." << std::endl;
+    iter.cluster = (arma::index_max(ll, 1) + 1) % tc_set;
 
-  // Determine elements to trim
-  arma::uvec sorted_index = arma::sort_index(pre_z, "descending");
-  arma::uvec last_indexes = arma::linspace<arma::uvec>(no_trim, n - 1, n - no_trim);
-  arma::uvec obs_to_trim = sorted_index.elem(last_indexes);
-  pre_z.elem(obs_to_trim) = arma::zeros<arma::vec>(n - no_trim);
-  tc_set = pre_z > 0;
+    // Find assignation matrix posterior
+    if(opt == "MIXT") {
+        iter.posterior = ll;
+        iter.posterior.each_col() /= (pre_z + (pre_z == 0));
+    } else {
+    
+        arma::uvec one_to_n = arma::linspace<arma::uvec>(0, n - 1, n);
+        arma::uvec aux_assig = iter.cluster - 1 + (iter.cluster == 0);
+        
+        // 2xn matrix containing (observation, cluster) pairs in each column
+        arma::umat subscripts = (arma::join_rows(one_to_n, aux_assig)).t();
+        
+        iter.posterior = arma::mat(n, k);
+        iter.posterior.elem(arma::sub2ind(arma::size(iter.posterior), subscripts)) = arma::ones<arma::vec>(n);
+    }
 
-  // Cluster assignment with trimming
-  // Rcout << "New cluster assignment ..." << std::endl;
-  iter.cluster = (arma::index_max(ll, 1) + 1) % tc_set;
+    iter.posterior.each_col() %= arma::conv_to<arma::vec>::from(tc_set); // Set to 0 all trimmed rows
+    
+    if(opt == "HARD" && arma::all(old_assig == iter.cluster)) {
+        iter.code = 2;
+    }
 
-  // Find assignation matrix posterior
-  if(opt == "MIXT") {
-    iter.posterior = ll;
-    iter.posterior.each_col() /= (pre_z + (pre_z == 0));
-  } else {
-
-    arma::uvec one_to_n = arma::linspace<arma::uvec>(0, n - 1, n);
-    arma::uvec aux_assig = iter.cluster - 1 + (iter.cluster == 0);
-
-    // 2xn matrix containing (observation, cluster) pairs in each column
-    arma::umat subscripts = (arma::join_rows(one_to_n, aux_assig)).t();
-
-    iter.posterior = arma::mat(n, k);
-    iter.posterior.elem(arma::sub2ind(arma::size(iter.posterior), subscripts)) = arma::ones<arma::vec>(n);
-  }
-
-  iter.posterior.each_col() %= arma::conv_to<arma::vec>::from(tc_set); // Set to 0 all trimmed rows
-
-  if(opt == "HARD" && arma::all(old_assig == iter.cluster)) {
-    iter.code = 2;
-  }
-
-  // Obtain the clusters size
-  iter.size = (arma::sum(iter.posterior, 0)).t();
-
-  if (!equal_weights)
-    iter.weights = iter.size/no_trim;
+    // Obtain the clusters size
+    iter.size = (arma::sum(iter.posterior, 0)).t();
+    
+    if (!equal_weights)
+        iter.weights = iter.size/no_trim;
 
 }
 

@@ -256,8 +256,8 @@ tclust2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, i
     
     stopCluster(parclus)
     
-    cluster.ini <- init.results[0:(nstart-1) * 2 + 1] # Impair positions of cluster.ini
-    obj.ini <- unlist(init.results[1:nstart * 2]) # Pair positions of cluster.ini
+    cluster.ini <- init.results[0:(nstart-1) * 2 + 1]       # Impair positions of cluster.ini
+    obj.ini <- unlist(init.results[1:nstart * 2])           # Pair positions of cluster.ini
   }
   
   

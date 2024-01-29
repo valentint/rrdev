@@ -110,3 +110,37 @@ tclust_HandleSmallEv <- function(autovalues, zero_tol = 1e-16) {
     .Call(`_robClus_tclust_HandleSmallEv`, autovalues, zero_tol)
 }
 
+#' Internal function for concentration steps (initializations) in tkmeans2
+#' @name tkmeans_c1
+#' @param x Rcpp::NumericMatrix, The input data.
+#' @param k The number of clusters initially searched for.
+#' @param alpha double, The proportion of observations to be trimmed.
+#' @param niter1 int, The number of concentration steps to be performed for the 
+#'     nstart initializations. 
+#' @param zero_tol The zero tolerance used. By default set to 1e-16.
+#' @param points Optional initial mean vectors, \code{NULL} or a matrix with \code{k} 
+#'  vectors used as means to initialize the algorithm. If initial mean vectors are 
+#'  specified, \code{nstart} should be 1 (otherwise the same initial means are 
+#'  used for all runs).
+#' @export
+tkmeans_c1 <- function(x, k, alpha = 0.05, niter1 = 3L, zero_tol = 1e-16, points = NULL) {
+    .Call(`_robClus_tkmeans_c1`, x, k, alpha, niter1, zero_tol, points)
+}
+
+#' Internal function for concentration steps (refinement) in tkmeans2
+#' @name tkmeans_c2
+#' @param x Rcpp::NumericMatrix, The input data.
+#' @param k The number of clusters initially searched for.
+#' @param cluster arma::uvec A numerical vector of size \code{n} containing the 
+#'      cluster assignment for each observation. Cluster names are integer numbers 
+#'      from 1 to k, 0 indicates trimmed observations. 
+#' @param alpha double, The proportion of observations to be trimmed.
+#' @param niter2 The maximum number of concentration steps to be performed for the 
+#'  \code{nkeep} solutions kept for further iteration. The concentration steps are 
+#'  stopped, whenever two consecutive steps lead to the same data partition.
+#' @param zero_tol The zero tolerance used. By default set to 1e-16.
+#' @export
+tkmeans_c2 <- function(x, k, cluster, alpha = 0.05, niter2 = 20L, zero_tol = 1e-16) {
+    .Call(`_robClus_tkmeans_c2`, x, k, cluster, alpha, niter2, zero_tol)
+}
+

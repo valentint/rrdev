@@ -27,6 +27,7 @@ struct iteration
   arma::mat centers;    // Cluster centers
   arma::cube cov;       // Cluster covariance matrices
   arma::uvec cluster;   // Cluster assignation indices
+  arma::vec disttom;    // Distances to cluster center
   double obj;           // Value of the objective function
   arma::vec size;       // Cluster sizes
   arma::vec weights;    // Cluster weights
