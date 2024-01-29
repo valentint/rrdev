@@ -210,35 +210,36 @@ print(autovalues_det)
     ##  - restr.factor  - constraint level for the determinant constraints
     ##  - cshape        - constraint level for the eigenvalues constraints, default is 1e10
 
-    p <- nrow(autovalues)
-    K <- ncol(autovalues)
+
+    p <- nrow(autovalues)
+    K <- ncol(autovalues)
 
     autovalues[autovalues < 1e-16] <- 0
     autovalues_ <- autovalues
 
     if(p == 1)
-        return(.restr2_eigenv(autovalues, ni.ini, restr.factor, zero.tol))
+        return(.restr2_eigenv(autovalues, ni.ini, restr.factor, zero.tol))
 
     for(k in 1:K)                                
-        autovalues_[,k] <- .restr2_eigenv(autovalues=cbind(autovalues[,k]), ni.ini=1, restr.fact=cshape, zero.tol)
+        autovalues_[,k] <- .restr2_eigenv(autovalues=cbind(autovalues[,k]), ni.ini=1, restr.fact=cshape, zero.tol)
 
     ##  cat("\nautovalues_\n"); print(autovalues_)
     
-    es <- apply(autovalues_, 2, prod)
+    es <- apply(autovalues_, 2, prod)
     es[es==0] <- 1
     
     ##  cat("\nes\n"); print(es)
     
     ##  cat("\nesmat\n"); print(matrix((es^(1/p)), ncol=K, nrow=p, byrow=TRUE))
 
-    gm <- autovalues_/matrix((es^(1/p)), ncol=K, nrow=p, byrow=TRUE)
+    gm <- autovalues_/matrix((es^(1/p)), ncol=K, nrow=p, byrow=TRUE)
 
     ##  cat("\ngm\n"); print(gm)
 
     d <- rbind(apply(autovalues/gm, 2, sum)/p)
     d[is.nan(d)] <- 0
 
-    dfin <- .restr2_eigenv(d, ni.ini, restr.factor^(1/p), zero.tol)
+    dfin <- .restr2_eigenv(d, ni.ini, restr.factor^(1/p), zero.tol)
     dout <- matrix(dfin, ncol=K, nrow=p, byrow=TRUE) * (gm * (gm>0) + 1 * (gm==0))  
     
     return (dout)
