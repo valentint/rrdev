@@ -9,7 +9,7 @@ tkmeans2(
   x,
   k,
   alpha = 0.05,
-  nstart = 50,
+  nstart = 500,
   niter1 = 3,
   niter2 = 20,
   nkeep = 5,

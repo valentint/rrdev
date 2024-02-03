@@ -7,20 +7,20 @@
 ##  roxygen2::roxygenise("C:/users/valen/onedrive/myrepo/rrdev/robClus", load_code=roxygen2:::load_installed)
 
 #'
-#' Compute Bayesean (discriminant) factors for tclust2 Objects
+#' Compute Bayesian (discriminant) factors for tclust2 Objects
 #' 
-#' @name bfact
-#' @aliases print.bfact
+#' @name DiscrFact
+#' @aliases print.DiscrFact
 #' @description Analyzes a \code{tclust2}-object by calculating discriminant factors 
 #'  and comparing the quality of the actual cluster assignments to that of the second best 
 #'  possible assignment for each observation. Cluster assignments of observations 
 #'  with large discriminant factors are considered "doubtful" decisions. Silhouette 
 #'  plots give a graphical overview of the discriminant factors distribution 
-#'  (see \code{\link{plot.bfact}}). More details can be found in García-Escudero et al. (2011).
+#'  (see \code{\link{plot.DiscrFact}}). More details can be found in García-Escudero et al. (2011).
 #' @param x A \code{tclust2} object.
 #' @param threshold  A cluster assignment or a trimming decision for an observation with a 
 #'  discriminant factor larger than \code{log(threshold)} is considered a "doubtful" decision. 
-#' @return The function returns an S3 object of type \code{bfact} containing the following components:
+#' @return The function returns an S3 object of type \code{DiscrFact} containing the following components:
 #'	\itemize{
 #'      \item \code{x} A \code{tclust2} object. 
 #'      \item \code{ylimmin} A minimum y-limit calculated for plotting purposes. 
@@ -30,7 +30,7 @@
 #'	    \item \code{lik2} The (weighted) likelihood of the second best cluster assignment of each observation. 
 #'	    \item \code{assignfact} The factor \code{log(disc/disc2)}. 
 #'	    \item \code{threshold} The threshold used for deciding whether \code{assignfact} indicates a "doubtful" assignment. 
-#'	    \item \code{mean.bfact} A vector of length \code{k + 1} containing the mean discriminant 
+#'	    \item \code{mean.DiscrFact} A vector of length \code{k + 1} containing the mean discriminant 
 #'      factors for each cluster (including the outliers). 
 #'  }
 #' @references 
@@ -39,7 +39,7 @@
 #'    pp. 585-599, <doi:10.1007/s11222-010-9194-z>
 #'
 #' 
-bfact <- function(x, threshold=1/10)
+DiscrFact <- function(x, threshold=1/10)
 {
     if (!any (class (x) == "tclust2"))
       stop ("parameter x: expected object of type \x22tclust2\x22")
@@ -54,7 +54,7 @@ bfact <- function(x, threshold=1/10)
     no.trim = floor(n*(1-alpha))
 
     for(k in 1:x$k)
-      ll[,k] <- (x$size[k] / no.trim) * .dmnorm(x$par$x, x$centers[,k], as.matrix(x$cov[,,k]))
+      ll[,k] <- (x$size[k] / no.trim) * dmvnrm(x$par$x, x$centers[,k], as.matrix(x$cov[,,k]))
 
     llo <- apply(-ll, 1, order)         # the row-wise order of matrix ll 
     if(!is.matrix(llo))
@@ -84,23 +84,23 @@ bfact <- function(x, threshold=1/10)
     ylimmin <- min(assignfact[idx.fin]) * 1.5
     assignfact[!idx.fin] <- ylimmin * 2
 
-    mean.bfact <- array(,x$k)
+    mean.DiscrFact <- array(,x$k)
     for (i in 0:x$k)
-      mean.bfact[i + 1] = mean(assignfact[ind == i])
+      mean.DiscrFact[i + 1] = mean(assignfact[ind == i])
       
-    names(mean.bfact) <- c ("O", 1:x$k)
+    names(mean.DiscrFact) <- c ("O", 1:x$k)
 
     ret <- list(x=x, ylimmin=ylimmin, ind=ind, ind2=ind2, assignfact=assignfact, 
             lik=lik, lik2=lik2, threshold=log(threshold), 
-            mean.bfact=mean.bfact)
-    class (ret) <- "bfact"
+            mean.DiscrFact=mean.DiscrFact)
+    class (ret) <- "DiscrFact"
     ret
   }
 
-print.bfact <- function (x, ...) {
+print.DiscrFact <- function (x, ...) {
   cat ("Mean overall discriminant factor:", mean (x$assignfact), "\n")
   cat ("Mean discriminant factor per cluster:\n")
-  print (x$mean.bfact)
+  print (x$mean.DiscrFact)
 
   idx <- x$assignfact > x$threshold
 
@@ -112,34 +112,34 @@ print.bfact <- function (x, ...) {
   invisible(x)
 }
 
-#' @name plot.bfact
-#' @title plot.bfact The \code{plot} method for class \code{bfact}
-#' @rdname plot.bfact
-#' @aliases plot_bfact_p2
-#' @aliases plot_bfact_p3
-#' @description The \code{plot} method for class \code{bfact}: Next to a plot of the \code{tclust2} 
-#'  object which has been used for creating the \code{bfact} object, a silhouette plot 
+#' @name plot.DiscrFact
+#' @title plot.DiscrFact The \code{plot} method for class \code{DiscrFact}
+#' @rdname plot.DiscrFact
+#' @aliases plot_DiscrFact_p2
+#' @aliases plot_DiscrFact_p3
+#' @description The \code{plot} method for class \code{DiscrFact}: Next to a plot of the \code{tclust2} 
+#'  object which has been used for creating the \code{DiscrFact} object, a silhouette plot 
 #'  indicates the presence of groups with a large amount of doubtfully assigned 
 #'  observations. A third plot similar to the standard \code{tclust2} plot serves 
 #'  to highlight the identified doubtful observations.
 #'
-#' @param x An object of class \code{bfact} as returned from bfact()
+#' @param x An object of class \code{DiscrFact} as returned from DiscrFact()
 #' @param enum.plots A logical value indicating whether the plots shall be enumerated 
 #'  in their title ("(a)", "(b)", "(c)").
 #' @param xlab,ylab,xlim Arguments passed to funcion \code{plot.tclust2()}
 #' @param main Argument passed to funcion \code{plot()}
-#' @param print.bfact A logical value indicating whether each clusters mean discriminant factor shall be plotted
+#' @param print.DiscrFact A logical value indicating whether each clusters mean discriminant factor shall be plotted
 #' @param main.pre An optional string which is appended to the plot's caption.
 #' @param pch,col Arguments passed to function \code{plot()}.
 #' @param col.nodoubt Color of all observations not considered as to be assigned doubtfully.
 #' @param by.cluster Logical value indicating whether parameters pch and col refer to observations (FALSE) or clusters (TRUE)
 #' @param \ldots Arguments to be passed to or from other methods
 #'
-#' @details \code{plot_bfact_p2} displays a silhouette plot based on the discriminant 
+#' @details \code{plot_DiscrFact_p2} displays a silhouette plot based on the discriminant 
 #'  factors of the observations. A solution with many large discriminant factors is 
 #'  not reliable. Such clusters can be identified with this silhouette plot. 
-#'  Thus \code{plot_bfact_p3} displays the dataset, highlighting observations with 
-#'  discriminant factors greater than the given threshold. The function \code{plot.bfact()} 
+#'  Thus \code{plot_DiscrFact_p3} displays the dataset, highlighting observations with 
+#'  discriminant factors greater than the given threshold. The function \code{plot.DiscrFact()} 
 #'  combines the standard plot of a \code{tclust2} object, and the two plots introduced here.
 #'
 #' @references 
@@ -158,17 +158,17 @@ print.bfact <- function (x, ...) {
 #'  clus.1 <- tclust2(x, k = 2, alpha=0.1, restr.fact=12)
 #'  clus.2 <- tclust2(x, k = 3, alpha=0.1, restr.fact=1)
 #'
-#'  dsc.1 <- bfact(clus.1)
+#'  dsc.1 <- DiscrFact(clus.1)
 #'  plot(dsc.1)
 #'
-#'  dsc.2 <- bfact(clus.2)
+#'  dsc.2 <- DiscrFact(clus.2)
 #'  plot(dsc.2)
 #'
 #'  dev.off ()
-#'  plot_bfact_p2(dsc.1)
-#'  plot_bfact_p3(dsc.2)
+#'  plot_DiscrFact_p2(dsc.1)
+#'  plot_DiscrFact_p3(dsc.2)
 #'
-plot.bfact <- function (x, enum.plots = FALSE, ...)
+plot.DiscrFact <- function (x, enum.plots = FALSE, ...)
 {
   if(enum.plots)
     main.pre <-  c ("(a)", "(b)", "(c)")
@@ -178,15 +178,15 @@ plot.bfact <- function (x, enum.plots = FALSE, ...)
   old.par <- par (mfrow = c (1,3))
 
   plot(x$x, main.pre = main.pre[1], ...)
-  plot_bfact_p2 (x, main.pre = main.pre[2], ...)
-  plot_bfact_p3 (x, main.pre = main.pre[3], ...)  
+  plot_DiscrFact_p2 (x, main.pre = main.pre[2], ...)
+  plot_DiscrFact_p3 (x, main.pre = main.pre[3], ...)  
 
   par (old.par)
 }
 
-#' @rdname plot.bfact
-plot_bfact_p2 <- function(x, xlab = "Discriminant Factor", ylab = "Clusters", main, xlim,
-          print.bfact=TRUE, main.pre, ...)
+#' @rdname plot.DiscrFact
+plot_DiscrFact_p2 <- function(x, xlab = "Discriminant Factor", ylab = "Clusters", main, xlim,
+          print.DiscrFact=TRUE, main.pre, ...)
 {
   n <- x$x$int$dim[1]
 
@@ -241,16 +241,16 @@ plot_bfact_p2 <- function(x, xlab = "Discriminant Factor", ylab = "Clusters", ma
 
   xpos = sum (par ("usr")[1:2] * c (1, 4)) / 5
   
-  if(print.bfact)
-    legend ("topleft", legend = format (x$mean.bfact[(x$x$k + 1):1],
+  if(print.DiscrFact)
+    legend ("topleft", legend = format (x$mean.DiscrFact[(x$x$k + 1):1],
             digits = 4), inset = 0.04, col = 1 + (x$x$k:0), pch = 15,
             title = "Mean Discriminant Factors", box.lwd = 0, bty = "n")
   abline (v = x$threshold + 1, lty = 2)
 
 }
 
-#' @rdname plot.bfact
-plot_bfact_p3 <- function(x, main="Doubtful Assignments", col, pch, 
+#' @rdname plot.DiscrFact
+plot_DiscrFact_p3 <- function(x, main="Doubtful Assignments", col, pch, 
           col.nodoubt= grey(0.8), by.cluster=FALSE, ...)
 {
   idxplot <- x$assignfact > x$threshold
@@ -268,12 +268,12 @@ plot_bfact_p3 <- function(x, main="Doubtful Assignments", col, pch,
 }
 
 
-#' @name summary.bfact
-#' @title summary.bfact The \code{summary} method for class \code{bfact}
-#' @rdname summary.bfact
-#' @description The summary method for class \code{bfact}.
+#' @name summary.DiscrFact
+#' @title summary.DiscrFact The \code{summary} method for class \code{DiscrFact}
+#' @rdname summary.DiscrFact
+#' @description The summary method for class \code{DiscrFact}.
 #'
-#' @param object An object of class \code{bfact} as returned from \code{bfact()}.
+#' @param object An object of class \code{DiscrFact} as returned from \code{DiscrFact()}.
 #' @param hide.emtpy A logical value specifying whether clusters without doubtful 
 #'  assignment shall be hidden.
 #' @param show.clust A logical value specifying whether the number of doubtful 
@@ -297,13 +297,13 @@ plot_bfact_p3 <- function(x, main="Doubtful Assignments", col, pch,
 #'  clus.1 <- tclust2(x, k = 2, alpha=0.1, restr.fact=12)
 #'  clus.2 <- tclust2(x, k = 3, alpha=0.1, restr.fact=1)
 #'
-#'  dsc.1 <- bfact(clus.1)
+#'  dsc.1 <- DiscrFact(clus.1)
 #'  summary(dsc.1)
 #'
-#'  dsc.2 <- bfact(clus.2)
+#'  dsc.2 <- DiscrFact(clus.2)
 #'  summary(dsc.2)
 #'
-summary.bfact <- function(object, hide.emtpy=TRUE, show.clust, show.alt, ...) {
+summary.DiscrFact <- function(object, hide.emtpy=TRUE, show.clust, show.alt, ...) {
   idx <- object$assignfact > object$threshold
   k <- object$x$k
   

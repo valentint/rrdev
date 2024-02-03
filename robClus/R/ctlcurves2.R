@@ -123,7 +123,7 @@ ctlcurves2 <- function(x, k=1:4, alpha=seq(0, 0.2, len=6), restr.fact=50, trace=
 
       drop[i, j] <- FALSE   # clus$warnings$drop | clus$warnings$size | clus$warnings$sizep
 
-      dsc <- bfact(clus)
+      dsc <- DiscrFact(clus)
       ndoubt[i, j] <- sum (dsc$assignfact > dsc$threshold)
 
       unrestr.fact[i, j] <- clus$unrestr.fact
@@ -176,7 +176,7 @@ ctlcurves2 <- function(x, k=1:4, alpha=seq(0, 0.2, len=6), restr.fact=50, trace=
 #'    \item{\code{"min.weights"}}{The minimum cluster weight found for each computed model. 
 #'      This plot is intended to spot spurious clusters, which in 
 #'	     general yield quite small weights.}
-#'    \item{\code{"doubtful"}}{The number of "doubtful" decisions identified by \code{\link{bfact}}.}
+#'    \item{\code{"doubtful"}}{The number of "doubtful" decisions identified by \code{\link{DiscrFact}}.}
 #'  }
 #'
 #' @references 

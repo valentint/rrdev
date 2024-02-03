@@ -124,7 +124,7 @@
 #'
 #'  plot(clus)
 #'
-tkmeans2 <- function(x, k, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, iter.max, points=NULL, 
+tkmeans2 <- function(x, k, alpha=0.05, nstart=500, niter1=3, niter2=20, nkeep=5, iter.max, points=NULL, 
                    center=FALSE, scale=FALSE, store_x=TRUE, 
                    parallel=FALSE, n.cores=-1, 
                    zero_tol=1e-16, trace=0)  {

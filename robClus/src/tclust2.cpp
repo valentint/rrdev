@@ -438,8 +438,7 @@ void inplace_tri_mat_mult(arma::rowvec &x, arma::mat const &trimat)
 {
   arma::uword const n = trimat.n_cols;
 
-  for (unsigned j = n; j-- > 0;)
-  {
+  for(unsigned j = n; j-- > 0;) {
     double tmp(0.);
     for (unsigned i = 0; i <= j; ++i)
       tmp += trimat.at(i, j) * x[i];
@@ -447,14 +446,10 @@ void inplace_tri_mat_mult(arma::rowvec &x, arma::mat const &trimat)
   }
 }
 
-arma::vec dmvnrm_arma_fast(arma::mat const &x,
-                           arma::rowvec const &mean,
-                           arma::mat const &cov,
-                           bool const logd = false)
+arma::vec dmvnrm_arma_fast(arma::mat const &x, arma::rowvec const &mean, arma::mat const &cov, bool const logd = false)
 {
   using arma::uword;
-  uword const n = x.n_rows,
-              xdim = x.n_cols;
+  uword const n = x.n_rows, xdim = x.n_cols;
   arma::vec out(n);
   arma::mat const rooti = arma::inv(trimatu(arma::chol(cov)));
   double const rootisum = arma::sum(log(rooti.diag())),
@@ -462,15 +457,15 @@ arma::vec dmvnrm_arma_fast(arma::mat const &x,
                other_terms = rootisum + constants;
 
   arma::rowvec z;
-  for (uword i = 0; i < n; i++)
-  {
+  for(uword i = 0; i < n; i++) {
     z = (x.row(i) - mean);
     inplace_tri_mat_mult(z, rooti);
     out(i) = other_terms - 0.5 * arma::dot(z, z);
   }
 
-  if (logd)
+  if(logd)
     return out;
+  
   return exp(out);
 }
 
@@ -811,4 +806,9 @@ arma::mat tclust_restr2_deter(arma::mat autovalues, arma::vec ni_ini, double res
 // [[Rcpp::export]]
 arma::mat tclust_HandleSmallEv(arma::mat autovalues, double zero_tol=1e-16) {
     return HandleSmallEv(autovalues, zero_tol);
+}
+
+// [[Rcpp::export]]
+arma::vec dmvnrm(arma::mat x, arma::rowvec mean, arma::mat cov) {
+    return dmvnrm_arma_fast(x, mean, cov, false);
 }

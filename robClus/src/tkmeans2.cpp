@@ -158,7 +158,7 @@ void tkmeans_csteps(int niter, arma::mat x, iteration &iter, params &pa)
   
     // calculates the objective function value
     // calcObj(x, iter, pa); 
-    iter.obj = arma::sum(iter.disttom);
+    iter.obj = arma::sum(iter.disttom)/no_trim;
 }
 
 //' Internal function for concentration steps (initializations) in tkmeans2

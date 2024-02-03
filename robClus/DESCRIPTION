@@ -2,7 +2,7 @@ Package: robClus
 Type: Package
 Encoding: UTF-8
 Title: Robust Clustering Based on Trimming
-Version: 2.1-0
+Version: 2.1-1
 Authors@R: c(person("Valentin", "Todorov", role = c("aut", "cre"), email = "valentin@todorov.at", comment=c(ORCID = "0000-0003-4215-0245"))
          , person("Javier", "Crespo Guerrero", role = "aut")
          , person("Luis Angel", "García Escudero", role = "aut")
@@ -15,6 +15,7 @@ Description: Provides functions for robust trimmed clustering. The methods are
     <doi:10.1111/j.1467-9868.2008.00682.x> and others.
 Depends: R (>= 3.5.0)
 Imports: Rcpp (>= 1.0.7), doParallel, parallel, foreach, MASS, mvtnorm
+Suggests: mclust, cluster, sn
 LazyLoad: yes
 License: GPL (>=3)
 LinkingTo: Rcpp, RcppArmadillo

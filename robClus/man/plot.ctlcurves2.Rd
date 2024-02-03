@@ -56,7 +56,7 @@ These curves show the values of the trimmed classification (log-)likelihoods
    \item{\code{"min.weights"}}{The minimum cluster weight found for each computed model. 
      This plot is intended to spot spurious clusters, which in 
      general yield quite small weights.}
-   \item{\code{"doubtful"}}{The number of "doubtful" decisions identified by \code{\link{bfact}}.}
+   \item{\code{"doubtful"}}{The number of "doubtful" decisions identified by \code{\link{DiscrFact}}.}
  }
 }
 \examples{

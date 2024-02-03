@@ -59,8 +59,8 @@ x <- rbind(mvtnorm::rmvnorm(360, cen * 0,   sig),
   ##  restr.fact and k are chosen improperly for pointing out the
   ##    difference in the plot of DiscrFact
 
-(dsc.1 <- bfact(clus.1))
-(dsc.2 <- bfact(clus.2))
+(dsc.1 <- DiscrFact(clus.1))
+(dsc.2 <- DiscrFact(clus.2))
 
 
 ########## Classification Trimmed Likelihood Curves  ###################

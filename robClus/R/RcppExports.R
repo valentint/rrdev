@@ -110,6 +110,10 @@ tclust_HandleSmallEv <- function(autovalues, zero_tol = 1e-16) {
     .Call(`_robClus_tclust_HandleSmallEv`, autovalues, zero_tol)
 }
 
+dmvnrm <- function(x, mean, cov) {
+    .Call(`_robClus_dmvnrm`, x, mean, cov)
+}
+
 #' Internal function for concentration steps (initializations) in tkmeans2
 #' @name tkmeans_c1
 #' @param x Rcpp::NumericMatrix, The input data.

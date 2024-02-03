@@ -1,23 +1,4 @@
-##  Multivariate normal density
-#o  .dmnorm <- function (X,mu,sigma) ((2 * pi)^(-length(mu) / 2)) * (det(sigma)^(-1/ 2)) * exp (-0.5 * mahalanobis (X, mu, sigma))
-.dmnorm <- function (X,mu,sigma)
-{
-  ((2 * pi)^(-length(mu) / 2)) *
-  (det(sigma)^(-1/ 2)) *
-  exp (-0.5 * .evmaha (X, mu, sigma))
-}
-
-.evmaha <- function (X, mu, sigma)    ##  calculate mahalanobis distances 
-                                      ##  using the eigenvalues and eigenvectors. 
-                                      ##  thus no singularity problems arise.
-{                                     ##  Mahalanobis distance == Inf is possible.
-    v <- eigen (sigma)
-    Zt <- t (v$vectors) %*% (t (X) - mu)
-    colSums ((Zt * v$values^(-.5))^2)
-}
-
-.doEllipses <-
-function (eigval, eigvec, eigen, center, cov, n = 100, size = 1, ...)
+.doEllipses <- function (eigval, eigvec, eigen, center, cov, n = 100, size = 1, ...)
 {
   if (!missing (cov))
     eigen <- base::eigen (cov)
@@ -57,8 +38,7 @@ function (eigval, eigvec, eigen, center, cov, n = 100, size = 1, ...)
 .getsubmatrix <- function(x, idx)  
     matrix (x[drop = FALSE,,,idx], nrow = dim (x)[1])
 
-.vline <-
-function (x, yfact = 2, col = 1, lty = 1, lwd = 1, ...)
+.vline <- function (x, yfact = 2, col = 1, lty = 1, lwd = 1, ...)
 {
    ylim = par ("usr")[3:4]
    ylim <- ylim + diff (ylim) * (1 - 1 / yfact) / 2 * c(1,-1)

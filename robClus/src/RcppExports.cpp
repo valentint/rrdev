@@ -139,6 +139,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dmvnrm
+arma::vec dmvnrm(arma::mat x, arma::rowvec mean, arma::mat cov);
+RcppExport SEXP _robClus_dmvnrm(SEXP xSEXP, SEXP meanSEXP, SEXP covSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type cov(covSEXP);
+    rcpp_result_gen = Rcpp::wrap(dmvnrm(x, mean, cov));
+    return rcpp_result_gen;
+END_RCPP
+}
 // tkmeans_c1
 Rcpp::List tkmeans_c1(arma::mat x, int k, double alpha, int niter1, double zero_tol, Rcpp::Nullable<Rcpp::NumericMatrix> points);
 RcppExport SEXP _robClus_tkmeans_c1(SEXP xSEXP, SEXP kSEXP, SEXP alphaSEXP, SEXP niter1SEXP, SEXP zero_tolSEXP, SEXP pointsSEXP) {
@@ -181,6 +194,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_robClus_tclust_restr2_deter_old", (DL_FUNC) &_robClus_tclust_restr2_deter_old, 4},
     {"_robClus_tclust_restr2_deter", (DL_FUNC) &_robClus_tclust_restr2_deter, 5},
     {"_robClus_tclust_HandleSmallEv", (DL_FUNC) &_robClus_tclust_HandleSmallEv, 2},
+    {"_robClus_dmvnrm", (DL_FUNC) &_robClus_dmvnrm, 3},
     {"_robClus_tkmeans_c1", (DL_FUNC) &_robClus_tkmeans_c1, 6},
     {"_robClus_tkmeans_c2", (DL_FUNC) &_robClus_tkmeans_c2, 6},
     {NULL, NULL, 0}

@@ -76,7 +76,7 @@
 #' plot(clus, which="scores") 
 #'
 #'
-rlg <-function(x, d, alpha=0.05, nstart=50, niter1=3, niter2=20, nkeep=5, scale=FALSE, 
+rlg <-function(x, d, alpha=0.05, nstart=500, niter1=3, niter2=20, nkeep=5, scale=FALSE, 
     parallel=FALSE, n.cores=-1, trace=FALSE){
   x <- as.matrix(x)
   if(is.null(nstart)){nstart <- sum(d)*40}
