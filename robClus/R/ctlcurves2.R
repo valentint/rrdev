@@ -46,9 +46,9 @@
 #'
 #'  sig <- diag (2)
 #'  cen <- rep (1, 2)
-#'  x <- rbind(mvtnorm::rmvnorm(108, cen * 0,   sig),
-#'  	       mvtnorm::rmvnorm(162, cen * 5,   sig * 6 - 2),
-#'  	       mvtnorm::rmvnorm(30, cen * 2.5, sig * 50))
+#'  x <- rbind(MASS::mvrnorm(108, cen * 0,   sig),
+#'  	       MASS::mvrnorm(162, cen * 5,   sig * 6 - 2),
+#'  	       MASS::mvrnorm(30, cen * 2.5, sig * 50))
 #'
 #'  ctl <- ctlcurves2(x, k = 1:4)
 #'
@@ -145,7 +145,7 @@ ctlcurves2 <- function(x, k=1:4, alpha=seq(0, 0.2, len=6), restr.fact=50, trace=
 }
 
 #' @name plot.ctlcurves2
-#' @title plot.ctlcurves2 The \code{plot} method for class \code{ctlcurves2}
+#' @title The \code{plot} method for objects of class \code{ctlcurves2}
 #' @rdname plot.ctlcurves2
 #' @description The \code{plot} method for class \code{ctlcurves2}: This function implements 
 #'  a series of plots, which display characteristic values 
@@ -190,9 +190,9 @@ ctlcurves2 <- function(x, k=1:4, alpha=seq(0, 0.2, len=6), restr.fact=50, trace=
 #'
 #'  sig <- diag (2)
 #'  cen <- rep (1, 2)
-#'  x <- rbind(mvtnorm::rmvnorm(108, cen * 0,   sig),
-#'  	       mvtnorm::rmvnorm(162, cen * 5,   sig * 6 - 2),
-#'  	       mvtnorm::rmvnorm(30, cen * 2.5, sig * 50))
+#'  x <- rbind(MASS::mvrnorm(108, cen * 0,   sig),
+#'  	       MASS::mvrnorm(162, cen * 5,   sig * 6 - 2),
+#'  	       MASS::mvrnorm(30, cen * 2.5, sig * 50))
 #'
 #'  ctl <- ctlcurves2(x, k = 1:4)
 #'  plot(ctl)

@@ -1,12 +1,12 @@
 if(FALSE)
 {
     library(robClus)
-    library(mvtnorm)
+    library(MASS)
     
     x <- as.matrix(iris[, -5])
     dm1 <- robClus:::dmvnrm(x, colMeans(x), cov(x))
     dm2 <- .dmnorm(x, colMeans(x), cov(x))
-    dm3 <- mvtnorm::dmvnorm(x, colMeans(x), cov(x))
+    dm3 <- MASS::mvrnorm(x, colMeans(x), cov(x))
     cbind.data.frame(dm1=dm1, dm2=dm2, dm3=dm3, diff1=round(dm1-dm2, 12), diff2=round(dm1-dm3, 12))
 }
 

@@ -61,18 +61,18 @@ Rcpp::NumericMatrix selecciona_puntos(Rcpp::NumericMatrix a, Rcpp::NumericVector
 }
 
 
-//' Internal function for concentration steps (initializations) in rlg
-//' @name rlg_c1
-//' @param x Rcpp::NumericMatrix, The input data.
-//' @param d Rcpp::NumericVector, A numeric vector of length equal to the number 
-//'  of clusters to be detected. 
-//'  Each component of vector \code{d} indicates the intrinsic dimension of the affine subspace 
-//'  where observations on that cluster are going to be clustered. All the elements 
-//'  of vector \code{d} should be smaller than the problem dimension minus 1.
-//' @param alpha double, The proportion of observations to be trimmed.
-//' @param niter1 int, The number of concentration steps to be performed for the 
-//' nstart initializations. 
-//' @export
+// Internal function for concentration steps (initializations) in rlg
+// @name rlg_c1
+// @param x Rcpp::NumericMatrix, The input data.
+// @param d Rcpp::NumericVector, A numeric vector of length equal to the number 
+//  of clusters to be detected. 
+//  Each component of vector \code{d} indicates the intrinsic dimension of the affine subspace 
+//  where observations on that cluster are going to be clustered. All the elements 
+//  of vector \code{d} should be smaller than the problem dimension minus 1.
+// @param alpha double, The proportion of observations to be trimmed.
+// @param niter1 int, The number of concentration steps to be performed for the 
+// nstart initializations. 
+// @export
 // [[Rcpp::export]]
 Rcpp::List rlg_c1(Rcpp::NumericMatrix x, Rcpp::NumericVector d, double alpha = 0.05, int niter1 = 3) {
   int k = d.length();
@@ -236,22 +236,22 @@ Rcpp::List rlg_c1(Rcpp::NumericMatrix x, Rcpp::NumericVector d, double alpha = 0
   );
 }
 
-//' Internal function for concentration steps (refinement) in rlg
-//' @name rlg_c2
-//' @param x Rcpp::NumericMatrix, The input data.
-//' @param d Rcpp::NumericVector, A numeric vector of length equal to the number 
-//'  of clusters to be detected. 
-//'  Each component of vector \code{d} indicates the intrinsic dimension of the affine subspace 
-//'  where observations on that cluster are going to be clustered. All the elements 
-//'  of vector \code{d} should be smaller than the problem dimension minus 1.
-//' @param cluster Rcpp::NumericVector  A numeric vector of size \code{n} containing 
-//'  the cluster assignment for each observation. Cluster names are integer numbers 
-//   from 1 to \code{k}, 0 indicates trimmed observations.
-//' @param alpha double, The proportion of observations to be trimmed.
-//' @param niter2 int, The maximum number of concentration steps to be performed for 
-//'  the \code{nkeep} solutions kept for further iteration. The concentration steps 
-//'  are stopped, whenever two consecutive steps lead to the same data partition. 
-//' @export
+// Internal function for concentration steps (refinement) in rlg
+// @name rlg_c2
+// @param x Rcpp::NumericMatrix, The input data.
+// @param d Rcpp::NumericVector, A numeric vector of length equal to the number 
+//  of clusters to be detected. 
+//  Each component of vector \code{d} indicates the intrinsic dimension of the affine subspace 
+//  where observations on that cluster are going to be clustered. All the elements 
+//  of vector \code{d} should be smaller than the problem dimension minus 1.
+// @param cluster Rcpp::NumericVector  A numeric vector of size \code{n} containing 
+//  the cluster assignment for each observation. Cluster names are integer numbers 
+//  from 1 to \code{k}, 0 indicates trimmed observations.
+// @param alpha double, The proportion of observations to be trimmed.
+// @param niter2 int, The maximum number of concentration steps to be performed for 
+//  the \code{nkeep} solutions kept for further iteration. The concentration steps 
+//  are stopped, whenever two consecutive steps lead to the same data partition. 
+// @export
 // [[Rcpp::export]]
 Rcpp::List rlg_c2(Rcpp::NumericMatrix x, Rcpp::NumericVector d, Rcpp::NumericVector cluster, double alpha = 0.05, int niter2 = 20) {
   int k = d.length();

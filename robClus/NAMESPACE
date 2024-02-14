@@ -14,7 +14,6 @@ importFrom("stats", "heatmap", "princomp", "qchisq", "cov")
  importFrom("stats", "mahalanobis", "qnorm", "quantile", "sd")
   
 importFrom("MASS", "mvrnorm")
-importFrom("mvtnorm", "rmvnorm")
 importFrom("parallel", "detectCores", "makeCluster", "stopCluster")
 import("foreach", "foreach")
 import(doParallel)
@@ -32,14 +31,14 @@ export(
     print.DiscrFact,
     summary.DiscrFact,
     plot.DiscrFact,
-    plot_DiscrFact_p2,
-    plot_DiscrFact_p3,
+#    plot_DiscrFact_p2,
+#    plot_DiscrFact_p3,
     ctlcurves2,
     print.ctlcurves2,
     plot.ctlcurves2,
     
-    tclust_c1,
-    tclust_c2,
+#    tclust_c1,
+#    tclust_c2,
     
     tkmeans2,
     print.tkmeans2,

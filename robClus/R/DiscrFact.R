@@ -7,7 +7,7 @@
 ##  roxygen2::roxygenise("C:/users/valen/onedrive/myrepo/rrdev/robClus", load_code=roxygen2:::load_installed)
 
 #'
-#' Compute Bayesian (discriminant) factors for tclust2 Objects
+#' Discriminant Factor analysis for \code{tclust2} objects
 #' 
 #' @name DiscrFact
 #' @aliases print.DiscrFact
@@ -113,10 +113,8 @@ print.DiscrFact <- function (x, ...) {
 }
 
 #' @name plot.DiscrFact
-#' @title plot.DiscrFact The \code{plot} method for class \code{DiscrFact}
+#' @title The \code{plot} method for objects of class \code{DiscrFact}
 #' @rdname plot.DiscrFact
-#' @aliases plot_DiscrFact_p2
-#' @aliases plot_DiscrFact_p3
 #' @description The \code{plot} method for class \code{DiscrFact}: Next to a plot of the \code{tclust2} 
 #'  object which has been used for creating the \code{DiscrFact} object, a silhouette plot 
 #'  indicates the presence of groups with a large amount of doubtfully assigned 
@@ -127,12 +125,10 @@ print.DiscrFact <- function (x, ...) {
 #' @param enum.plots A logical value indicating whether the plots shall be enumerated 
 #'  in their title ("(a)", "(b)", "(c)").
 #' @param xlab,ylab,xlim Arguments passed to funcion \code{plot.tclust2()}
-#' @param main Argument passed to funcion \code{plot()}
 #' @param print.DiscrFact A logical value indicating whether each clusters mean discriminant factor shall be plotted
-#' @param main.pre An optional string which is appended to the plot's caption.
-#' @param pch,col Arguments passed to function \code{plot()}.
 #' @param col.nodoubt Color of all observations not considered as to be assigned doubtfully.
-#' @param by.cluster Logical value indicating whether parameters pch and col refer to observations (FALSE) or clusters (TRUE)
+#' @param by.cluster Logical value indicating whether optional parameters pch and col 
+#'  (if present) refer to observations (FALSE) or clusters (TRUE)
 #' @param \ldots Arguments to be passed to or from other methods
 #'
 #' @details \code{plot_DiscrFact_p2} displays a silhouette plot based on the discriminant 
@@ -150,10 +146,9 @@ print.DiscrFact <- function (x, ...) {
 #' @examples
 #'  sig <- diag (2)
 #'  cen <- rep (1, 2)
-#'  x <- rbind(mvtnorm::rmvnorm(360, cen * 0,   sig),
-#'  	       mvtnorm::rmvnorm(540, cen * 5,   sig * 6 - 2),
-#'  	       mvtnorm::rmvnorm(100, cen * 2.5, sig * 50)
-#'  )
+#'  x <- rbind(MASS::mvrnorm(360, cen * 0,   sig),
+#'  	       MASS::mvrnorm(540, cen * 5,   sig * 6 - 2),
+#'  	       MASS::mvrnorm(100, cen * 2.5, sig * 50))
 #'
 #'  clus.1 <- tclust2(x, k = 2, alpha=0.1, restr.fact=12)
 #'  clus.2 <- tclust2(x, k = 3, alpha=0.1, restr.fact=1)
@@ -164,11 +159,9 @@ print.DiscrFact <- function (x, ...) {
 #'  dsc.2 <- DiscrFact(clus.2)
 #'  plot(dsc.2)
 #'
-#'  dev.off ()
-#'  plot_DiscrFact_p2(dsc.1)
-#'  plot_DiscrFact_p3(dsc.2)
-#'
-plot.DiscrFact <- function (x, enum.plots = FALSE, ...)
+plot.DiscrFact <- function (x, enum.plots = FALSE, 
+    xlab="Discriminant Factor", ylab="Clusters", print.DiscrFact=TRUE, xlim, 
+    col.nodoubt= grey(0.8), by.cluster=FALSE, ...)
 {
   if(enum.plots)
     main.pre <-  c ("(a)", "(b)", "(c)")
@@ -178,14 +171,13 @@ plot.DiscrFact <- function (x, enum.plots = FALSE, ...)
   old.par <- par (mfrow = c (1,3))
 
   plot(x$x, main.pre = main.pre[1], ...)
-  plot_DiscrFact_p2 (x, main.pre = main.pre[2], ...)
-  plot_DiscrFact_p3 (x, main.pre = main.pre[3], ...)  
+  plot_DiscrFact_p2 (x, main.pre = main.pre[2], xlab=xlab, ylab=ylab, print.DiscrFact=print.DiscrFact, xlim=xlim, ...)
+  plot_DiscrFact_p3 (x, main.pre = main.pre[3], col.nodoubt=col.nodoubt, by.cluster=by.cluster, ...)  
 
   par (old.par)
 }
 
-#' @rdname plot.DiscrFact
-plot_DiscrFact_p2 <- function(x, xlab = "Discriminant Factor", ylab = "Clusters", main, xlim,
+plot_DiscrFact_p2 <- function(x, xlab="Discriminant Factor", ylab="Clusters", main, xlim,
           print.DiscrFact=TRUE, main.pre, ...)
 {
   n <- x$x$int$dim[1]
@@ -249,7 +241,6 @@ plot_DiscrFact_p2 <- function(x, xlab = "Discriminant Factor", ylab = "Clusters"
 
 }
 
-#' @rdname plot.DiscrFact
 plot_DiscrFact_p3 <- function(x, main="Doubtful Assignments", col, pch, 
           col.nodoubt= grey(0.8), by.cluster=FALSE, ...)
 {
@@ -269,7 +260,7 @@ plot_DiscrFact_p3 <- function(x, main="Doubtful Assignments", col, pch,
 
 
 #' @name summary.DiscrFact
-#' @title summary.DiscrFact The \code{summary} method for class \code{DiscrFact}
+#' @title The \code{summary} method for objects of class \code{DiscrFact}
 #' @rdname summary.DiscrFact
 #' @description The summary method for class \code{DiscrFact}.
 #'
@@ -289,9 +280,9 @@ plot_DiscrFact_p3 <- function(x, main="Doubtful Assignments", col, pch,
 #' @examples
 #'  sig <- diag (2)
 #'  cen <- rep (1, 2)
-#'  x <- rbind(mvtnorm::rmvnorm(360, cen * 0,   sig),
-#'  	       mvtnorm::rmvnorm(540, cen * 5,   sig * 6 - 2),
-#'  	       mvtnorm::rmvnorm(100, cen * 2.5, sig * 50)
+#'  x <- rbind(MASS::mvrnorm(360, cen * 0,   sig),
+#'  	       MASS::mvrnorm(540, cen * 5,   sig * 6 - 2),
+#'  	       MASS::mvrnorm(100, cen * 2.5, sig * 50)
 #'  )
 #'
 #'  clus.1 <- tclust2(x, k = 2, alpha=0.1, restr.fact=12)

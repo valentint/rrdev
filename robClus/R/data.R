@@ -1,6 +1,7 @@
 ##  roxygen2::roxygenise("C:/users/valen/onedrive/myrepo/rrdev/robClus", load_code=roxygen2:::load_installed)
 
 #'  LG5data data
+#'
 #' A data set in dimension 10 with three clusters around affine subspaces
 #'  of common intrinsic dimension. A 10\% background noise is added uniformly 
 #'  distributed in a rectangle containing the three main clusters. 

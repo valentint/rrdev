@@ -3,7 +3,7 @@
 \name{DiscrFact}
 \alias{DiscrFact}
 \alias{print.DiscrFact}
-\title{Compute Bayesian (discriminant) factors for tclust2 Objects}
+\title{Discriminant Factor analysis for \code{tclust2} objects}
 \usage{
 DiscrFact(x, threshold = 1/10)
 }

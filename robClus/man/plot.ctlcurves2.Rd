@@ -2,7 +2,7 @@
 % Please edit documentation in R/ctlcurves2.R
 \name{plot.ctlcurves2}
 \alias{plot.ctlcurves2}
-\title{plot.ctlcurves2 The \code{plot} method for class \code{ctlcurves2}}
+\title{The \code{plot} method for objects of class \code{ctlcurves2}}
 \usage{
 \method{plot}{ctlcurves2}(
   x,
@@ -65,9 +65,9 @@ These curves show the values of the trimmed classification (log-)likelihoods
 
  sig <- diag (2)
  cen <- rep (1, 2)
- x <- rbind(mvtnorm::rmvnorm(108, cen * 0,   sig),
- 	       mvtnorm::rmvnorm(162, cen * 5,   sig * 6 - 2),
- 	       mvtnorm::rmvnorm(30, cen * 2.5, sig * 50))
+ x <- rbind(MASS::mvrnorm(108, cen * 0,   sig),
+ 	       MASS::mvrnorm(162, cen * 5,   sig * 6 - 2),
+ 	       MASS::mvrnorm(30, cen * 2.5, sig * 50))
 
  ctl <- ctlcurves2(x, k = 1:4)
  plot(ctl)

@@ -19,7 +19,7 @@ rlg(
 )
 }
 \arguments{
-\item{x}{A matrix or data.frame of dimension n x p, containing the observations (row-wise).}
+\item{x}{A matrix or data.frame of dimension n x p, containing the observations (rowwise).}
 
 \item{d}{A numeric vector of length equal to the number of clusters to be detected. 
 Each component of vector \code{d} indicates the intrinsic dimension of the affine subspace 
@@ -64,17 +64,17 @@ Returns an object of class \code{rlg} which is basically a list with the followi
 }
 }
 \description{
-rlg searches for clusters around affine subspaces of dimensions given by 
- vector d (the length of that vector is the number of clusters). For instance \code{d=c(1,2)} 
- means that we are clustering around a line and a plana. For robustifying the estimation, 
- a proportion alpha of observations is trimmed. In particular, the trimmed k-means 
- method is represented by the rlg method, if d=c(0,0,..0) (a vector of length 
+The function \code{rlg()} searches for clusters around affine subspaces of dimensions given by 
+ vector \code{d} (the length of that vector is the number of clusters). For instance \code{d=c(1,2)} 
+ means that we are clustering around a line and a plane. For robustifying the estimation, 
+ a proportion \code{alpha} of observations is trimmed. In particular, the trimmed k-means 
+ method is represented by the rlg method, if \code{d=c(0,0,..0)} (a vector of length 
  \code{k} with zeroes).
 }
 \details{
 The procedure allows to deal with robust clustering around affine subspaces 
    with an alpha proportion of trimming level by minimizing the trimmed sums of squared 
-   orthogonal residuals. Each component of vector d indicates the intrinsic dimension of 
+   orthogonal residuals. Each component of vector \code{d} indicates the intrinsic dimension of 
    the affine subspace where observations on that cluster are going to be clustered. 
    Therefore a component equal to 0 on that vector implies clustering around centres, 
    equal to 1 around lines, equal to 2 around planes and so on. The procedure so 
@@ -82,10 +82,10 @@ The procedure allows to deal with robust clustering around affine subspaces
 
 This iterative algorithm performs "concentration steps" to improve the current 
  cluster assignments. For approximately obtaining the global optimum, the procedure 
- is random initialized nstart times and niter1 concentration steps are performed 
- for them. The nkeep most “promising” iterations, i.e. the nkeep iterated solutions 
+ is randomly initialized \code{nstart} times and \code{niter1} concentration steps are performed 
+ for them. The \code{nkeep} most “promising” iterations, i.e. the \code{nkeep} iterated solutions 
  with the initial best values for the target function, are then iterated until 
- convergence or until niter2 concentration steps are done.
+ convergence or until \code{niter2} concentration steps are done.
 }
 \examples{
 data (LG5data)
@@ -94,7 +94,6 @@ clus <- rlg(x, d = c(2,2,2), alpha=0.1)
 plot(x, col=clus$cluster+1)
 plot(clus, which="eigenvalues") 
 plot(clus, which="scores") 
-
 
 }
 \references{

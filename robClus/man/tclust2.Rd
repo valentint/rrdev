@@ -54,16 +54,28 @@ to the same data partition.}
 \item{equal.weights}{A logical value, specifying whether equal cluster weights 
 shall be considered in the concentration and assignment steps.}
 
-\item{restr}{Restriction type (eigenvalues or determinant)}
+\item{restr}{Restriction type to control relative cluster scatters. 
+The default value is \code{restr="eigen"}, so that the maximal ratio between 
+the largest and the smallest of the scatter matrices eigenvalues is constrained 
+to be smaller then or equal to \code{restr.fact} 
+(Garcia-Escudero, Gordaliza, Matran, and Mayo-Iscar, 2008). 
+Alternatively, \code{restr="deter"} imposes that the maximal ratio between 
+the largest and the smallest of the scatter matrices determinants is smaller 
+or equal than \code{restr.fact} (see Garcia-Escudero, Mayo-Iscar and Riani, 2020)}
 
 \item{restr.fact}{The constant \code{restr.fact >= 1} constrains the allowed 
-differences among group scatters in terms of eigenvalues ratio. Larger values 
+differences among group scatters in terms of eigenvalues ratio
+(if \code{restr="eigen"}) or determinant ratios (if \code{restr="deter"}). Larger values 
 imply larger differences of group scatters, a value of 1 specifies the 
 strongest restriction.}
 
-\item{cshape}{constraint to apply to the shape matrices (\code{cshape >= 1}). 
+\item{cshape}{constraint to apply to the shape matrices, \code{cshape >= 1}, 
+(see Garcia-Escudero, Mayo-Iscar and Riani, 2020)). 
 This options only works if \code{restr=='deter'}. In this case the default 
-value is \code{cshape=1e10} to ensure the procedure is (virtually) affine equivariant.}
+value is \code{cshape=1e10} to ensure the procedure is (virtually) affine equivariant. 
+On the other hand, \code{cshape} values close to 1 would force the clusters to 
+be almost spherical (without necessarily the same scatters if \code{restr.fact} 
+is strictly greater than 1).}
 
 \item{opt}{Define the target function to be optimized. A classification likelihood 
 target function is considered if \code{opt="HARD"} and a mixture classification 
@@ -124,33 +136,45 @@ The function returns the following values:
 \description{
 This function searches for \code{k} (or less) clusters with 
  different covariance structures in a data matrix \code{x}. Relative cluster 
- scatter can be restricted by a constant value \code{restr.fact}. 
+ scatter can be restricted when \code{restr="eigen"} by constraining the ratio 
+ between the largest and the smallest of the scatter matrices eigenvalues 
+ by a constant value \code{restr.fact}. Relative cluster scatters can be also 
+ restricted with \code{restr="deter"} by constraining the ratio between the 
+ largest and the smallest of the scatter matrices' determinants. 
+
  For robustifying the estimation, a proportion \code{alpha} of observations is trimmed. 
  In particular, the trimmed k-means method is represented by the \code{tclust2()} method,
  by setting parameters \code{restr.fact=1}, \code{opt="HARD"} and \code{equal.weights=TRUE}.
 }
 \details{
-The procedure allows to deal with robust clustering with an alpha 
- proportion of trimming level and searching for k clusters. We are considering 
- classification trimmed likelihood when using opt=”HARD” so that “hard” or “crisp” 
+The procedure allows to deal with robust clustering with an \code{alpha}
+ proportion of trimming level and searching for \code{k} clusters. We are considering 
+ classification trimmed likelihood when using \code{opt=”HARD”} so that “hard” or “crisp” 
  clustering assignments are done. On the other hand, mixture trimmed likelihood 
- are applied when using opt=”MIXT” so providing a kind of clusters “posterior” 
+ are applied when using \code{opt=”MIXT”} so providing a kind of clusters “posterior” 
  probabilities for the observations. 
+ Relative cluster scatter can be restricted when \code{restr="eigen"} by constraining 
+ the ratio between the largest and the smallest of the scatter matrices eigenvalues 
+ by a constant value \code{restr.fact}. Setting \code{restr.fact=1}, yields the 
+ strongest restriction, forcing all clusters to be spherical and equally scattered. 
+ Relative cluster scatters can be also restricted with \code{restr="deter"} by 
+ constraining the ratio between the largest and the smallest of the scatter 
+ matrices' determinants. 
 
-This iterative algorithm performs "concentration steps" to improve the current 
+ This iterative algorithm performs "concentration steps" to improve the current 
  cluster assignments. For approximately obtaining the global optimum, the procedure 
- is random initialized nstart times and niter1 concentration steps are performed for 
- them. The nkeep most “promising” iterations, i.e. the nkeep iterated solutions with 
+ is randomly initialized \code{nstart} times and \code{niter1} concentration steps are performed for 
+ them. The \code{nkeep} most “promising” iterations, i.e. the \code{nkeep} iterated solutions with 
  the initial best values for the target function, are then iterated until convergence 
- or until niter2 concentration steps are done. 
+ or until \code{niter2} concentration steps are done. 
 
 The parameter \code{restr.fact} defines the cluster scatter matrices restrictions, 
- which are applied on all clusters during each concentration step. The parameter 
- \code{restr.fact} restricts the ratio between the maximum and minimum eigenvalue of 
- all cluster's covariance structures to that parameter. Setting \code{restr.fact=1}, 
+ which are applied on all clusters during each concentration step. It restricts 
+ the ratio between the maximum and minimum eigenvalue of 
+ all clusters' covariance structures to that parameter. Setting \code{restr.fact=1}, 
  yields the strongest restriction, forcing all clusters to be spherical and equally scattered. 
 
-Cluster components with similar sizes are favouring when considering \code{equal.weights=TRUE} 
+Cluster components with similar sizes are favoured when considering \code{equal.weights=TRUE} 
  while \code{equal.weights=FALSE} admits possible different prior probabilities for 
  the components and it can easily return empty clusters when the number of 
  clusters is greater than apparently needed.
@@ -161,12 +185,11 @@ Cluster components with similar sizes are favouring when considering \code{equal
      set.seed (0)
  }
  ##--- EXAMPLE 1 ------------------------------------------
- sig <- diag (2)
- cen <- rep (1,2)
- x <- rbind(mvtnorm::rmvnorm(360, cen * 0,   sig),
-            mvtnorm::rmvnorm(540, cen * 5,   sig * 6 - 2),
-            mvtnorm::rmvnorm(100, cen * 2.5, sig * 50)
-            )
+ sig <- diag(2)
+ cen <- rep(1,2)
+ x <- rbind(MASS::mvrnorm(360, cen * 0,   sig),
+            MASS::mvrnorm(540, cen * 5,   sig * 6 - 2),
+            MASS::mvrnorm(100, cen * 2.5, sig * 50))
  
  ## Two groups and 10\\% trimming level
  clus <- tclust2(x, k = 2, alpha = 0.1, restr.fact = 8)
@@ -192,17 +215,17 @@ Cluster components with similar sizes are favouring when considering \code{equal
  clus.a <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  1,
                    restr = "eigen", equal.weights = TRUE)
  clus.b <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  1,
-                    equal.weights = TRUE)
+                   restr="eigen", equal.weights = FALSE)
  clus.c <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  1,
-                   restr = "deter", equal.weights = TRUE, iter.max = 100)
+                   restr = "deter", equal.weights = TRUE)
  clus.d <- tclust2(x, k = 3, alpha = 0.1, restr.fact = 50,
-                   restr = "eigen", equal.weights = FALSE)
+                   restr = "deter", equal.weights = FALSE)
  
  pa <- par(mfrow = c (2, 2))
- plot(clus.a, main = "(a) tkmeans")
- plot(clus.b, main = "(b) Gallegos and Ritter")
- plot(clus.c, main = "(c) Gallegos")
- plot(clus.d, main = "(d) tclust")
+ plot(clus.a, main = "(a)")
+ plot(clus.b, main = "(b)")
+ plot(clus.c, main = "(c)")
+ plot(clus.d, main = "(d)")
  par(pa)
  
  ##--- EXAMPLE 4 ------------------------------------------
@@ -231,6 +254,24 @@ Cluster components with similar sizes are favouring when considering \code{equal
  
  plot(clus)
  
+ ##--- EXAMPLE 5 ------------------------------------------
+  data(M5data)
+  x <- M5data[, 1:2]
+  
+  ## Classification trimmed likelihood approach
+  clus.a <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  50,
+                     opt="HARD", restr = "eigen", equal.weights = FALSE)
+ ## Mixture trimmed likelihood approach
+  clus.b <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  50,
+                     opt="MIXT", restr = "eigen", equal.weights = FALSE)
+ 
+ ## Hard 0-1 cluster assignment (all 0 if trimmed unit)
+ head(clus.a$posterior)
+ 
+ ## Posterior probabilities cluster assignment for the
+ ##  mixture approach (all 0 if trimmed unit)
+ head(clus.b$posterior)
+ 
 }
 \references{
 Fritz, H.; Garcia-Escudero, L.A.; Mayo-Iscar, A. (2012), "tclust: An R Package 
@@ -239,11 +280,15 @@ Fritz, H.; Garcia-Escudero, L.A.; Mayo-Iscar, A. (2012), "tclust: An R Package
 
 Garcia-Escudero, L.A.; Gordaliza, A.; Matran, C. and Mayo-Iscar, A. (2008), 
  "A General Trimming Approach to Robust Cluster Analysis". Annals of Statistics, 
- Vol.36, 1324-1345.  
+ Vol.36, 1324--1345.  
 
 García-Escudero, L. A., Gordaliza, A. and Mayo-Íscar, A. (2014). A constrained 
  robust proposal for mixture modeling avoiding spurious solutions. 
- Advances in Data Analysis and Classification, 27-43.
+ Advances in Data Analysis and Classification, 27--43. 
+
+García-Escudero, L. A., and Mayo-Íscar, A. and Riani, M. (2020). Model-based 
+ clustering with determinant-and-shape constraint. Statistics and Computing, 
+ 30, 1363--1380.]
 }
 \author{
 Javier Crespo Guerrero, Luis Angel Garcia Escudero, Agustin Mayo Iscar.

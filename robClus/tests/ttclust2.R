@@ -3,15 +3,15 @@
 suppressPackageStartupMessages(library(robClus))
 
 require(robClus)
-require(mvtnorm)
+require(MASS)
 #--- EXAMPLE 1 ------------------------------------------
 
 set.seed(123)
 sig <- diag (2)
 cen <- rep (1,2)
-x <- rbind(mvtnorm::rmvnorm(360, cen * 0,   sig),
-            mvtnorm::rmvnorm(540, cen * 5,   sig * 6 - 2),
-            mvtnorm::rmvnorm(100, cen * 2.5, sig * 50)
+x <- rbind(MASS::mvrnorm(360, cen * 0,   sig),
+           MASS::mvrnorm(540, cen * 5,   sig * 6 - 2),
+           MASS::mvrnorm(100, cen * 2.5, sig * 50)
            )
 
 # Two groups and 10% trimming level
@@ -49,9 +49,9 @@ data (swissbank)
 ##### Discriminant Factor Analysis for tclust Objects ############################
 sig <- diag (2)
 cen <- rep (1, 2)
-x <- rbind(mvtnorm::rmvnorm(360, cen * 0,   sig),
-	       mvtnorm::rmvnorm(540, cen * 5,   sig * 6 - 2),
-	       mvtnorm::rmvnorm(100, cen * 2.5, sig * 50)
+x <- rbind(MASS::mvrnorm(360, cen * 0,   sig),
+	       MASS::mvrnorm(540, cen * 5,   sig * 6 - 2),
+	       MASS::mvrnorm(100, cen * 2.5, sig * 50)
 )
 (clus.1 <- tclust2(x, k = 2, alpha = 0.1, restr.fact = 12))
 
@@ -72,9 +72,9 @@ x <- rbind(mvtnorm::rmvnorm(360, cen * 0,   sig),
 
     sig <- diag (2)
     cen <- rep (1, 2)
-    x <- rbind(mvtnorm::rmvnorm(108, cen * 0,   sig),
-    	       mvtnorm::rmvnorm(162, cen * 5,   sig * 6 - 2),
-    	       mvtnorm::rmvnorm(30, cen * 2.5, sig * 50)
+    x <- rbind(MASS::mvrnorm(108, cen * 0,   sig),
+    	       MASS::mvrnorm(162, cen * 5,   sig * 6 - 2),
+    	       MASS::mvrnorm(30, cen * 2.5, sig * 50)
     )
 
     (ctl <- ctlcurves2(x, k = 1:4))

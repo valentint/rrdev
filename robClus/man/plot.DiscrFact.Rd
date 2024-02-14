@@ -2,28 +2,15 @@
 % Please edit documentation in R/DiscrFact.R
 \name{plot.DiscrFact}
 \alias{plot.DiscrFact}
-\alias{plot_DiscrFact_p2}
-\alias{plot_DiscrFact_p3}
-\title{plot.DiscrFact The \code{plot} method for class \code{DiscrFact}}
+\title{The \code{plot} method for objects of class \code{DiscrFact}}
 \usage{
-\method{plot}{DiscrFact}(x, enum.plots = FALSE, ...)
-
-plot_DiscrFact_p2(
+\method{plot}{DiscrFact}(
   x,
+  enum.plots = FALSE,
   xlab = "Discriminant Factor",
   ylab = "Clusters",
-  main,
-  xlim,
   print.DiscrFact = TRUE,
-  main.pre,
-  ...
-)
-
-plot_DiscrFact_p3(
-  x,
-  main = "Doubtful Assignments",
-  col,
-  pch,
+  xlim,
   col.nodoubt = grey(0.8),
   by.cluster = FALSE,
   ...
@@ -37,17 +24,12 @@ in their title ("(a)", "(b)", "(c)").}
 
 \item{xlab, ylab, xlim}{Arguments passed to funcion \code{plot.tclust2()}}
 
-\item{main}{Argument passed to funcion \code{plot()}}
-
 \item{print.DiscrFact}{A logical value indicating whether each clusters mean discriminant factor shall be plotted}
-
-\item{main.pre}{An optional string which is appended to the plot's caption.}
-
-\item{pch, col}{Arguments passed to function \code{plot()}.}
 
 \item{col.nodoubt}{Color of all observations not considered as to be assigned doubtfully.}
 
-\item{by.cluster}{Logical value indicating whether parameters pch and col refer to observations (FALSE) or clusters (TRUE)}
+\item{by.cluster}{Logical value indicating whether optional parameters pch and col 
+(if present) refer to observations (FALSE) or clusters (TRUE)}
 
 \item{\ldots}{Arguments to be passed to or from other methods}
 }
@@ -69,10 +51,9 @@ The \code{plot} method for class \code{DiscrFact}: Next to a plot of the \code{t
 \examples{
  sig <- diag (2)
  cen <- rep (1, 2)
- x <- rbind(mvtnorm::rmvnorm(360, cen * 0,   sig),
- 	       mvtnorm::rmvnorm(540, cen * 5,   sig * 6 - 2),
- 	       mvtnorm::rmvnorm(100, cen * 2.5, sig * 50)
- )
+ x <- rbind(MASS::mvrnorm(360, cen * 0,   sig),
+ 	       MASS::mvrnorm(540, cen * 5,   sig * 6 - 2),
+ 	       MASS::mvrnorm(100, cen * 2.5, sig * 50))
 
  clus.1 <- tclust2(x, k = 2, alpha=0.1, restr.fact=12)
  clus.2 <- tclust2(x, k = 3, alpha=0.1, restr.fact=1)
@@ -82,10 +63,6 @@ The \code{plot} method for class \code{DiscrFact}: Next to a plot of the \code{t
 
  dsc.2 <- DiscrFact(clus.2)
  plot(dsc.2)
-
- dev.off ()
- plot_DiscrFact_p2(dsc.1)
- plot_DiscrFact_p3(dsc.2)
 
 }
 \references{

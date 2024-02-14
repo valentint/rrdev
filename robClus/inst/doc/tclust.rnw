@@ -522,10 +522,10 @@ which holds all trimmed data points.
 ################
 
   ## data generation
-library(mvtnorm)
+library(MASS)
 set.seed (10)
-x <- rbind(rmvnorm (200, c (0, 0), diag (2)),
-           rmvnorm (200, c (5, 0), diag (2)))
+x <- rbind(MASS::mvrnorm(200, c (0, 0), diag (2)),
+           MASS::mvrnorm(200, c (5, 0), diag (2)))
 
   ## applying tclust
 clus.4 <- tclust2(x, k = 3, alpha = 0.0, restr.fact = 1)
@@ -557,8 +557,8 @@ output by the \code{tclust} function and a warning is issued. For
 instance, let us consider the following code
 \begin{Code}
 R > set.seed(10)
-R > x <- rbind(rmvnorm (200, c (0, 0), diag (2)),
-    +          rmvnorm (200, c (5, 0), diag (2)))
+R > x <- rbind(MASS::mvrnorm(200, c (0, 0), diag (2)),
+    +          MASS::mvrnorm(200, c (5, 0), diag (2)))
 R > clus <- tclust(x, k = 3, alpha = 0, restr.fact = 1)
 R > plot(clus)
 \end{Code}
@@ -863,8 +863,8 @@ op <- par (mfrow = c (2, 2), mar = c (3.1, 3.1, 3.1, 2.1))
 
 set.seed (0)
 x <- rbind (
-            rmvnorm (360, c (0.0,  0), matrix (c ( 1,  0,  0, 1), ncol = 2)),
-            rmvnorm (540, c (5.0, 10), matrix (c ( 6, -2, -2, 6), ncol = 2)),
+            MASS::mvrnorm(360, c (0.0,  0), matrix (c ( 1,  0,  0, 1), ncol = 2)),
+            MASS::mvrnorm(540, c (5.0, 10), matrix (c ( 6, -2, -2, 6), ncol = 2)),
             cbind (runif (100, -5, 15), runif (100, -10, 20)))
 
   ## applying mclust
@@ -887,8 +887,8 @@ v <- runif (100, -2 * pi, 2 * pi)
 noise <- cbind (100 + 25 * sin (v), 10 + 5 * v)
 
 x <- rbind (
-            rmvnorm (360, c (0.0,  0), matrix (c (1,  0,  0, 1), ncol = 2)),
-            rmvnorm (540, c (5.0, 10), matrix (c (6, -2, -2, 6), ncol = 2)),
+            MASS::mvrnorm(360, c (0.0,  0), matrix (c (1,  0,  0, 1), ncol = 2)),
+            MASS::mvrnorm(540, c (5.0, 10), matrix (c (6, -2, -2, 6), ncol = 2)),
             noise)
 
   ##  applying mclust
@@ -964,9 +964,9 @@ R > sigma1 <- diag(2)          ## EigenValues: 1, 1
 R > sigma2 <- diag(2) * 8 - 2  ## EigenValues: 8, 4
 R > sigma3 <- diag(2) * 50     ## EigenValues: 50, 50
 R > mixt <- rbind(
-    + rmvnorm(360, mean = c (0.0,  0), sigma = sigma1),
-    + rmvnorm(540, mean = c (5.0, 10), sigma = sigma2),
-    + rmvnorm(100, mean = c (2.5,  5), sigma = sigma3))
+    + MASS::mvrnorm(360, mean = c (0.0,  0), sigma = sigma1),
+    + MASS::mvrnorm(540, mean = c (5.0, 10), sigma = sigma2),
+    + MASS::mvrnorm(100, mean = c (2.5,  5), sigma = sigma3))
 R > plot(tclust(mixt, k = 3, alpha = 0.00, restr.fact = 50))
 R > plot(tclust(mixt, k = 2, alpha = 0.05, restr.fact = 12))
 \end{Code}
@@ -982,9 +982,9 @@ R > plot(tclust(mixt, k = 2, alpha = 0.05, restr.fact = 12))
 
   ## data generation
 set.seed (100)
-mixt <- rbind (rmvnorm (360, c (  0,  0), matrix (c (1,  0,  0,  1), ncol = 2)),
-               rmvnorm (540, c (  5, 10), matrix (c (6, -2, -2,  6), ncol = 2)),
-               rmvnorm (100, c (2.5,  5), matrix (c (50, 0,  0, 50), ncol = 2)))
+mixt <- rbind(MASS::mvrnorm(360, c (  0,  0), matrix (c (1,  0,  0,  1), ncol = 2)),
+              MASS::mvrnorm(540, c (  5, 10), matrix (c (6, -2, -2,  6), ncol = 2)),
+              MASS::mvrnorm(100, c (2.5,  5), matrix (c (50, 0,  0, 50), ncol = 2)))
 
   ## applying tclust
 set.seed (100)
@@ -1285,10 +1285,9 @@ every observation in the data set, whether trimmed or not.
 ## data generation
 set.seed (100)
 mixt2 <- rbind (
-  rmvnorm (360, c (0,   0), matrix (c (1,  0,  0,  1), ncol = 2)),
-  rmvnorm (540, c (5,  10), matrix (c (6, -2, -2,  6), ncol = 2)),
-  rmvnorm (100, c (2.5, 5), matrix (c (50, 0,  0, 50), ncol = 2))
-)
+  MASS::mvrnorm(360, c (0,   0), matrix (c (1,  0,  0,  1), ncol = 2)),
+  MASS::mvrnorm(540, c (5,  10), matrix (c (6, -2, -2,  6), ncol = 2)),
+  MASS::mvrnorm(100, c (2.5, 5), matrix (c (50, 0,  0, 50), ncol = 2)))
 
   ## applying tclust
 set.seed (100)
@@ -1302,8 +1301,8 @@ discr.clus.w <- DiscrFact(clus.w)
 op <- par(mfrow = c(1, 3), mar = mmar)
 
 plot(clus.w, col = c(og, 2, 3, 4), tol.lty = 2, main.pre = "(a)")
-plot_DiscrFact_p2(discr.clus.w, xlim = c (-70, 0), main.pre = "(b)")
-plot_DiscrFact_p3(discr.clus.w, tol.lty = 2, main.pre = "(c)")
+robClus:::plot_DiscrFact_p2(discr.clus.w, xlim = c (-70, 0), main.pre = "(b)")
+robClus:::plot_DiscrFact_p3(discr.clus.w, tol.lty = 2, main.pre = "(c)")
 
 par(op)
 @

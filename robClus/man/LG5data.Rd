@@ -3,10 +3,7 @@
 \docType{data}
 \name{LG5data}
 \alias{LG5data}
-\title{LG5data data
-A data set in dimension 10 with three clusters around affine subspaces
- of common intrinsic dimension. A 10\% background noise is added uniformly 
- distributed in a rectangle containing the three main clusters.}
+\title{LG5data data}
 \format{
 The first 10 columns are the variables. The last column is the true 
  classification vector where symbol "0" stands for the contaminating data points.
@@ -15,7 +12,6 @@ The first 10 columns are the variables. The last column is the true
 data(LG5data)
 }
 \description{
-LG5data data
 A data set in dimension 10 with three clusters around affine subspaces
  of common intrinsic dimension. A 10\% background noise is added uniformly 
  distributed in a rectangle containing the three main clusters.

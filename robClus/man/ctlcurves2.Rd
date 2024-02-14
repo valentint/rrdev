@@ -60,9 +60,9 @@ These curves show the values of the trimmed classification (log-)likelihoods
 
  sig <- diag (2)
  cen <- rep (1, 2)
- x <- rbind(mvtnorm::rmvnorm(108, cen * 0,   sig),
- 	       mvtnorm::rmvnorm(162, cen * 5,   sig * 6 - 2),
- 	       mvtnorm::rmvnorm(30, cen * 2.5, sig * 50))
+ x <- rbind(MASS::mvrnorm(108, cen * 0,   sig),
+ 	       MASS::mvrnorm(162, cen * 5,   sig * 6 - 2),
+ 	       MASS::mvrnorm(30, cen * 2.5, sig * 50))
 
  ctl <- ctlcurves2(x, k = 1:4)
 
