@@ -10,6 +10,7 @@ ctlcurves2(
   k = 1:4,
   alpha = seq(0, 0.2, len = 6),
   restr.fact = 50,
+  parallel = FALSE,
   trace = 1,
   ...
 )
@@ -23,6 +24,8 @@ ctlcurves2(
 levels from 0 to 0.2 (continuously increased by 0.01), are checked.}
 
 \item{restr.fact}{The restriction factor passed to \code{\link{tclust2}}.}
+
+\item{parallel}{A logical value, to be passed further to \code{tclust2()}.}
 
 \item{trace}{Defines the tracing level, which is set to \code{1} by default. 
 Tracing level \code{2} gives additional information on the current iteration.}
@@ -65,6 +68,7 @@ These curves show the values of the trimmed classification (log-)likelihoods
  	       MASS::mvrnorm(30, cen * 2.5, sig * 50))
 
  ctl <- ctlcurves2(x, k = 1:4)
+ ctl
 
    ##  ctl-curves 
  plot(ctl)  ##  --> selecting k = 2, alpha = 0.08
@@ -76,6 +80,7 @@ These curves show the values of the trimmed classification (log-)likelihoods
 
  data(geyser2)
  ctl <- ctlcurves2(geyser2, k = 1:5)
+ ctl
  
    ##  ctl-curves 
  plot(ctl)  ##  --> selecting k = 3, alpha = 0.08
@@ -88,6 +93,7 @@ These curves show the values of the trimmed classification (log-)likelihoods
  
  data(swissbank)
  ctl <- ctlcurves2(swissbank, k = 1:5, alpha = seq (0, 0.3, by = 0.025))
+ ctl
  
    ##  ctl-curves 
  plot(ctl)  ##  --> selecting k = 2, alpha = 0.1

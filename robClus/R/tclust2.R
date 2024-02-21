@@ -182,7 +182,8 @@
 #'  
 #'  ##--- EXAMPLE 2 ------------------------------------------
 #'  data(geyser2)
-#'  clus <- tclust2(geyser2, k = 3, alpha = 0.03)
+#'  (clus <- tclust2(geyser2, k = 3, alpha = 0.03))
+#'  
 #'  plot(clus)
 #'  
 #'  ##--- EXAMPLE 3 ------------------------------------------
@@ -208,7 +209,7 @@
 #'  ##--- EXAMPLE 4 ------------------------------------------
 #'  data (swissbank)
 #'  ## Two clusters and 8\% trimming level
-#'  clus <- tclust2(swissbank, k = 2, alpha = 0.08, restr.fact = 50)
+#'  (clus <- tclust2(swissbank, k = 2, alpha = 0.08, restr.fact = 50))
 #'  
 #'  ## Pairs plot of the clustering solution
 #'  pairs(swissbank, col = clus$cluster + 1)

@@ -30,14 +30,14 @@ plot.rlg <- function(x, which=c("all", "scores", "loadings", "eigenvalues"),
     op <- if (ask) par(ask = TRUE) else list()
     on.exit(par(op))
     
-    if(which == "all" || which == "clusters")
-        .plot.clusters(x, sort=sort)
     if(which == "all" || which == "scores")
         .plot.scores(x)
     if(which == "all" || which == "loadings")
         .plot.loadings(x)
     if(which == "all" || which == "eigenvalues")
         .plot.eigenvalues(x)
+    
+    invisible(x)
 }
 
 .plot.clusters <- function(x, sort){
@@ -53,14 +53,18 @@ plot.rlg <- function(x, which=c("all", "scores", "loadings", "eigenvalues"),
 }
 
 .plot.scores <- function(x){
+  
   K <- which(x$dimensions >= 2)
-  par(mfrow=rev(n2mfrow(length(K))))
-  for(k in K){
-    scores <- princomp(x$x[x$cluster == k, ],cor = TRUE)$scores
-    plot(scores[,1], scores[,2],
-         main=paste("Cluster", k), xlab="dim 1", ylab="dim 2", col="white")
-    text(scores[,1], scores[,2],
-         as.character(substr(.get.rownames(x)[x$cluster==k], 1, 3)))
+  
+  if(length(K) > 0) {
+      par(mfrow=rev(n2mfrow(length(K))))
+      for(k in K){
+        scores <- princomp(x$x[x$cluster == k, ],cor = TRUE)$scores
+        plot(scores[,1], scores[,2],
+             main=paste("Cluster", k), xlab="dim 1", ylab="dim 2", col="white")
+        text(scores[,1], scores[,2],
+             as.character(substr(.get.rownames(x)[x$cluster==k], 1, 3)))
+      }
   }
 }
 

@@ -1,7 +1,7 @@
 ## Fix drop[i,j], out[i,j]  and unrestr.fact[i,j]
 ##
 
-##  roxygen2::roxygenise("C:/users/valen/onedrive/myrepo/R/robClus", load_code=roxygen2:::load_installed)
+##  roxygen2::roxygenise("C:/users/valen/onedrive/myrepo/rrdev/robClus", load_code=roxygen2:::load_installed)
 
 #'
 #' Classification Trimmed Likelihood Curves
@@ -26,6 +26,7 @@
 #' @param alpha A vector containing the alpha levels to be checked. By default \code{alpha} 
 #'  levels from 0 to 0.2 (continuously increased by 0.01), are checked.
 #' @param restr.fact The restriction factor passed to \code{\link{tclust2}}.
+#' @param parallel A logical value, to be passed further to \code{tclust2()}.
 #' @param \ldots Further arguments (as e.g. \code{restr}), passed to \code{\link{tclust2}} 
 #' @param trace Defines the tracing level, which is set to \code{1} by default. 
 #'  Tracing level \code{2} gives additional information on the current iteration.
@@ -51,6 +52,7 @@
 #'  	       MASS::mvrnorm(30, cen * 2.5, sig * 50))
 #'
 #'  ctl <- ctlcurves2(x, k = 1:4)
+#'  ctl
 #'
 #'    ##  ctl-curves 
 #'  plot(ctl)  ##  --> selecting k = 2, alpha = 0.08
@@ -62,6 +64,7 @@
 #'
 #'  data(geyser2)
 #'  ctl <- ctlcurves2(geyser2, k = 1:5)
+#'  ctl
 #'  
 #'    ##  ctl-curves 
 #'  plot(ctl)  ##  --> selecting k = 3, alpha = 0.08
@@ -74,6 +77,7 @@
 #'  
 #'  data(swissbank)
 #'  ctl <- ctlcurves2(swissbank, k = 1:5, alpha = seq (0, 0.3, by = 0.025))
+#'  ctl
 #'  
 #'    ##  ctl-curves 
 #'  plot(ctl)  ##  --> selecting k = 2, alpha = 0.1
@@ -82,7 +86,7 @@
 #'  plot(tclust2(swissbank, k = 2, alpha = 0.1, restr.fact = 50))
 #'  
 
-ctlcurves2 <- function(x, k=1:4, alpha=seq(0, 0.2, len=6), restr.fact=50, trace=1, ...) {
+ctlcurves2 <- function(x, k=1:4, alpha=seq(0, 0.2, len=6), restr.fact=50, parallel=FALSE, trace=1, ...) {
 
 ## disabled parameter:
   mah.alpha <- 0.05
@@ -117,7 +121,7 @@ ctlcurves2 <- function(x, k=1:4, alpha=seq(0, 0.2, len=6), restr.fact=50, trace=
       if (trace >= 2)
         cat ("k =", k[i], "; alpha =", alpha[j])
 
-      clus <- tclust2(x, k=k[i], alpha=alpha[j], restr.fact=restr.fact, trace=0, ...)
+      clus <- tclust2(x, k=k[i], alpha=alpha[j], restr.fact=restr.fact, parallel=parallel, trace=0, ...)
 
       out[i, j] <- sum(clus$mah > qchisq(1-mah.alpha, p), na.rm = TRUE)
 
@@ -194,7 +198,8 @@ ctlcurves2 <- function(x, k=1:4, alpha=seq(0, 0.2, len=6), restr.fact=50, trace=
 #'  	       MASS::mvrnorm(162, cen * 5,   sig * 6 - 2),
 #'  	       MASS::mvrnorm(30, cen * 2.5, sig * 50))
 #'
-#'  ctl <- ctlcurves2(x, k = 1:4)
+#'  (ctl <- ctlcurves2(x, k = 1:4))
+#'
 #'  plot(ctl)
 
 plot.ctlcurves2 <- function(x, what=c("obj", "min.weights", "doubtful"),

@@ -1,20 +1,21 @@
-#' Plot Method for \code{tclust2} Objects
+#' Plot Method for \code{tclust2} and \code{tkmeans2} Objects
 #'
-#' The plot method for classes \code{tclust2}.
+#' The plot method for classes \code{tclust2} and \code{tkmeans2}.
 #'
 #' @name plot.tclust2
 #' @aliases plot.tkmeans2
+#' @method plot tclust2
 
 #' @description One and two dimensional structures are treated separately (e.g. tolerance 
 #'  intervals/ellipses are displayed). Higher dimensional structures are displayed 
 #'  by plotting the two first Fisher's canonical coordinates (evaluated by 
-#'  \code{tclust::discr_coords}) and derived from the final cluster assignments 
+#'  \code{robClus::discr_coords}) and derived from the final cluster assignments 
 #'  (trimmed observations are not taken into account). 
-#'  \code{plot.tclust.Nd} can be called with one or two-dimensional \code{tclust2}-objects 
-#'  too. The function fails, if \code{store.x = FALSE} is specified in the \code{tclust2()} call, 
+#'  \code{plot.tclust.Nd} can be called with one or two-dimensional \code{tclust2}- or \code{tkmeans2}-objects 
+#'  too. The function fails, if \code{store.x = FALSE} is specified in the \code{tclust2()} or \code{tkmeans2()} call, 
 #'  because the original data matrix is required here.
 #'
-#' @param x The \code{tclust2} object to be displayed
+#' @param x The \code{tclust2} or \code{tkmeans2} object to be displayed
 #' @param \ldots Further (optional) arguments which specify the details of the 
 #'    resulting plot (see section "Further Arguments").
 #'
@@ -61,6 +62,21 @@
 #'  plot (a, labels = "cluster")
 #'  plot (a, by.cluster = TRUE)
 
+#'  #--- EXAMPLE 2------------------------------
+#'  sig <- diag (2)
+#'  cen <- rep (1, 2)
+#'  x <- rbind(MASS::mvrnorm(360, cen * 0,   sig),
+#'  	       MASS::mvrnorm(540, cen * 5,   sig),
+#'  	       MASS::mvrnorm(100, cen * 2.5, sig))
+#'  # Two groups and 10\% trimming level
+#'  a <- tkmeans2(x, k = 2, alpha = 0.1)
+
+#'  plot (a)
+#'  plot (a, labels = "observation")
+#'  plot (a, labels = "cluster")
+#'  plot (a, by.cluster = TRUE)
+#'
+
 plot.tclust2 <-
 function (x,  ...)
 {
@@ -72,6 +88,8 @@ function (x,  ...)
     .plot.tclust.Nd (x, ...)
 }
 
+#' @rdname plot.tclust2
+#' @method plot tkmeans2
 plot.tkmeans2 <- function(x,  ...) {
 	plot.tclust2(x, ...)
 }

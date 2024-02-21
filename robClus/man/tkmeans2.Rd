@@ -115,7 +115,7 @@ This function searches for \code{k} (or less) spherical clusters
             MASS::mvrnorm(100, cen * 2.5, sig))
  
  ## Two groups and 10\\% trimming level
- clus <- tkmeans2(x, k = 2, alpha = 0.1)
+ (clus <- tkmeans2(x, k = 2, alpha = 0.1))
 
  plot(clus)
  plot(clus, labels = "observation")
@@ -123,7 +123,7 @@ This function searches for \code{k} (or less) spherical clusters
 
  #--- EXAMPLE 2 ------------------------------------------
  data(geyser2)
- clus <- tkmeans2(geyser2, k = 3, alpha = 0.03)
+ (clus <- tkmeans2(geyser2, k = 3, alpha = 0.03))
  plot(clus)
  
 }

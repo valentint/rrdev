@@ -69,7 +69,8 @@ These curves show the values of the trimmed classification (log-)likelihoods
  	       MASS::mvrnorm(162, cen * 5,   sig * 6 - 2),
  	       MASS::mvrnorm(30, cen * 2.5, sig * 50))
 
- ctl <- ctlcurves2(x, k = 1:4)
+ (ctl <- ctlcurves2(x, k = 1:4))
+
  plot(ctl)
 }
 \references{
