@@ -215,8 +215,8 @@ Cluster components with similar sizes are favoured when considering \code{equal.
  
  clus.a <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  1,
                    restr = "eigen", equal.weights = TRUE)
- clus.b <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  1,
-                   restr="eigen", equal.weights = FALSE)
+ clus.b <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  50,
+                    restr = "eigen", equal.weights = FALSE)
  clus.c <- tclust2(x, k = 3, alpha = 0.1, restr.fact =  1,
                    restr = "deter", equal.weights = TRUE)
  clus.d <- tclust2(x, k = 3, alpha = 0.1, restr.fact = 50,

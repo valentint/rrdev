@@ -88,6 +88,7 @@ This iterative algorithm performs "concentration steps" to improve the current
  convergence or until \code{niter2} concentration steps are done.
 }
 \examples{
+##--- EXAMPLE 1 ------------------------------------------
 data (LG5data)
 x <- LG5data[, 1:10]
 clus <- rlg(x, d = c(2,2,2), alpha=0.1)
@@ -95,6 +96,11 @@ plot(x, col=clus$cluster+1)
 plot(clus, which="eigenvalues") 
 plot(clus, which="scores") 
 
+##--- EXAMPLE 2 ------------------------------------------
+ data (pine) 
+ clus <- rlg(pine, d = c(1,1,1), alpha=0.035)
+ plot(pine, col=clus$cluster+1)
+ 
 }
 \references{
 García‐Escudero, L. A., Gordaliza, A., San Martin, R., Van Aelst, S., & Zamar, R. (2009). 

@@ -154,12 +154,5 @@ NULL
 #'  Robust clusterwise linear regression through trimming. 
 #'  \emph{Computational Statistics & Data Analysis}, 54(12), 3057--3069.
 #'
-#' @examples 
-#'  data (pine) 
-#'  clus <- rlg(pine, d = c(1,1,1), alpha=0.035)
-#'  plot(pine, col=clus$cluster+1)
-#'  plot(clus, which="eigenvalues")
-#'  plot(clus, which="loadings")
-#'  
 #' @keywords datasets
 NULL

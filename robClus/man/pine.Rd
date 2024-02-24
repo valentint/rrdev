@@ -26,14 +26,6 @@ To study the growth of the wood mass in a cultivated forest of \emph{Pinus nigra
  tree with the largest diameter but small height. More details on the 
  interpretation of this dataset in García-Escudero et al (2010).
 }
-\examples{
- data (pine) 
- clus <- rlg(pine, d = c(1,1,1), alpha=0.035)
- plot(pine, col=clus$cluster+1)
- plot(clus, which="eigenvalues")
- plot(clus, which="loadings")
- 
-}
 \references{
 García-Escudero, L. A., Gordaliza, A., Mayo-Iscar, A., and San Martín, R. (2010). 
  Robust clusterwise linear regression through trimming. 

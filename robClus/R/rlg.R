@@ -68,6 +68,7 @@
 #' @export
 #'
 #' @examples
+#' ##--- EXAMPLE 1 ------------------------------------------
 #' data (LG5data)
 #' x <- LG5data[, 1:10]
 #' clus <- rlg(x, d = c(2,2,2), alpha=0.1)
@@ -75,6 +76,12 @@
 #' plot(clus, which="eigenvalues") 
 #' plot(clus, which="scores") 
 #'
+#' ##--- EXAMPLE 2 ------------------------------------------
+#'  data (pine) 
+#'  clus <- rlg(pine, d = c(1,1,1), alpha=0.035)
+#'  plot(pine, col=clus$cluster+1)
+#'  
+
 
 rlg <- function(x, d, alpha=0.05, nstart=500, niter1=3, niter2=20, nkeep=5, scale=FALSE, 
     parallel=FALSE, n.cores=-1, trace=FALSE){
