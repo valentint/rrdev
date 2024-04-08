@@ -1,8 +1,6 @@
 useDynLib(robClus, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 
-##  exportPattern("^[[:alpha:]]+")
-
 importFrom("stats", "mad", "median", "na.omit", "rnorm", "runif")
 importFrom("utils", "flush.console", "setTxtProgressBar",
              "txtProgressBar")

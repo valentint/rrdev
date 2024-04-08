@@ -96,7 +96,10 @@ Rcpp::List rlg_c1(Rcpp::NumericMatrix x, Rcpp::NumericVector d, double alpha = 0
       numRand = Rcpp::runif(1, 0, n).at(0);
       x_aux.row(i) = x.row(numRand);
       for(int j = 0; j < n; j++){
-        di(j,i) = sqrt(Rcpp::sum(pow(x.row(j)-x_aux.row(i),2)));
+        
+        // VT::18.03.2024 - fix the objective function value, see mail of Luis Angel from 5.3.2024
+        //  di(j,i) = sqrt(Rcpp::sum(pow(x.row(j)-x_aux.row(i),2)));
+        di(j,i) = Rcpp::sum(pow(x.row(j)-x_aux.row(i),2));
       }
     } else {
       
@@ -122,7 +125,9 @@ Rcpp::List rlg_c1(Rcpp::NumericMatrix x, Rcpp::NumericVector d, double alpha = 0
       arma::mat arma_x = Rcpp::as<arma::mat>(x_aux);
       
       for(int j = 0; j < n; j++){
-        di(j,i) = arma::norm(arma_productoMat*(arma_puntos.row(j)-arma_x.row(i)).t());;
+        // VT::18.03.2024 - fix the objective function value, see mail of Luis Angel from 5.3.2024
+        di(j,i) = arma::norm2est(arma_productoMat*(arma_puntos.row(j)-arma_x.row(i)).t());
+        di(j,i) = di(j,i) * di(j,i);
       }
       
     }
@@ -170,7 +175,9 @@ Rcpp::List rlg_c1(Rcpp::NumericMatrix x, Rcpp::NumericVector d, double alpha = 0
       x_aux.row(i) = media(x,cluster,i);
       if(d[i] == 0){
         for(int j = 0; j < n; j++){
-          di(j,i) = sqrt(Rcpp::sum(pow(x.row(j)-x_aux.row(i),2)));
+            // VT::18.03.2024 - fix the objective function value, see mail of Luis Angel from 5.3.2024
+            //  di(j,i) = sqrt(Rcpp::sum(pow(x.row(j)-x_aux.row(i),2)));
+            di(j,i) = Rcpp::sum(pow(x.row(j)-x_aux.row(i),2));
         }
       } else {
         
@@ -189,7 +196,9 @@ Rcpp::List rlg_c1(Rcpp::NumericMatrix x, Rcpp::NumericVector d, double alpha = 0
         arma::mat arma_x = Rcpp::as<arma::mat>(x_aux);
         
         for(int j = 0; j < n; j++){
-          di(j,i) = arma::norm(arma_productoMat*(arma_puntos.row(j)-arma_x.row(i)).t());;
+        // VT::18.03.2024 - fix the objective function value, see mail of Luis Angel from 5.3.2024
+          di(j,i) = arma::norm2est(arma_productoMat*(arma_puntos.row(j)-arma_x.row(i)).t());
+          di(j,i) = di(j,i) * di(j,i);
         }
         
       }
@@ -287,7 +296,9 @@ Rcpp::List rlg_c2(Rcpp::NumericMatrix x, Rcpp::NumericVector d, Rcpp::NumericVec
       x_aux.row(i) = media(x,cluster,i);
       if(d[i] == 0){
         for(int j = 0; j < n; j++){
-          di(j,i) = sqrt(Rcpp::sum(pow(x.row(j)-x_aux.row(i),2)));
+            // VT::18.03.2024 - fix the objective function value, see mail of Luis Angel from 5.3.2024
+            //  di(j,i) = sqrt(Rcpp::sum(pow(x.row(j)-x_aux.row(i),2)));
+            di(j,i) = Rcpp::sum(pow(x.row(j)-x_aux.row(i),2));
         }
       } else {
         Rcpp::NumericMatrix U(d[i],p);
@@ -305,7 +316,9 @@ Rcpp::List rlg_c2(Rcpp::NumericMatrix x, Rcpp::NumericVector d, Rcpp::NumericVec
         arma::mat arma_x = Rcpp::as<arma::mat>(x_aux);
         
         for(int j = 0; j < n; j++){
-          di(j,i) = arma::norm(arma_productoMat*(arma_puntos.row(j)-arma_x.row(i)).t());;
+          // VT::18.03.2024 - fix the objective function value, see mail of Luis Angel from 5.3.2024
+          di(j,i) = arma::norm2est(arma_productoMat*(arma_puntos.row(j)-arma_x.row(i)).t());
+          di(j,i) = di(j,i) * di(j,i);
         }
       }
     }
