@@ -69,6 +69,10 @@
 #' @param opt Define the target function to be optimized. A classification likelihood 
 #'  target function is considered if \code{opt="HARD"} and a mixture classification 
 #'  likelihood if \code{opt="MIXT"}.
+#' @param drop.empty.clust Logical value specifying, whether empty clusters shall be 
+#'  omitted in the resulting object. (The result structure does not contain center 
+#'  and covariance estimates of empty clusters anymore. Cluster names are reassigned 
+#'  such that the first l clusters (l <= k) always have at least one observation.
 #' @param trace Defines the tracing level, which is set to 0 by default. Tracing level 1 
 #'  gives additional information on the stage of the iterative process.
 #'
@@ -253,9 +257,9 @@
 
 tclust2 <- function(x, k, alpha=0.05, nstart=500, niter1=3, niter2=20, nkeep=5, iter.max,
                    equal.weights=FALSE, restr=c("eigen", "deter"), restr.fact=12, cshape=1e10, opt="HARD",
-                   center=FALSE, scale=FALSE, store_x=TRUE, 
+                   center=FALSE, scale=FALSE, store_x=TRUE,
                    parallel=FALSE, n.cores=-1, 
-                   zero_tol=1e-16, trace=0)  {
+                   zero_tol=1e-16, drop.empty.clust=TRUE, trace=0)  {
     
     restr <- match.arg(restr)
     restrC <- 0
@@ -270,7 +274,7 @@ tclust2 <- function(x, k, alpha=0.05, nstart=500, niter1=3, niter2=20, nkeep=5, 
         restr=restr, restr.C=restrC, deter.C=deterC, restr.fact=restr.fact, cshape=cshape,
         equal.weights=equal.weights, center=center, scale=scale,
 #           fuzzy=fuzzy, m=m, 
-        zero_tol=zero_tol, trace=trace, store_x=store_x)
+        zero_tol=zero_tol, drop.empty.clust=drop.empty.clust, trace=trace, store_x=store_x)
               
     # Initial checks
     
@@ -412,13 +416,19 @@ tclust2 <- function(x, k, alpha=0.05, nstart=500, niter1=3, niter2=20, nkeep=5, 
     cat("\n\n")
   }
   
-    ## Adjust the returned object to be similar to 'tclust': 
+    ## Adjust the returned object to be similar to the old 'tclust': 
     
     ## Handle empty clusters
-    ## ...
-    k.real <- k
+    if(drop.empty.clust)
+        idxuse <- which(best_iter$size > 0)
+    else
+        idxuse <- 1:k
+    idxuse <- idxuse[order(best_iter$size[idxuse], decreasing = TRUE)]
     
-    ##  ...
+    ClusterIDs <- rep(0, k + 1)
+    ClusterIDs[idxuse + 1] <- 1:length(idxuse)
+
+    k.real <- length(idxuse)
     
     ##  - A list of values internally used by functions related to tclust objects.
     int <- list(
@@ -427,10 +437,17 @@ tclust2 <- function(x, k, alpha=0.05, nstart=500, niter1=3, niter2=20, nkeep=5, 
     
     ## - Transpose the 'centers' matrix
     best_iter$centers <- t(best_iter$centers)
-    
+    best_iter$centers <- best_iter$centers[, idxuse, drop = FALSE]
+ 
+    best_iter$cov <- best_iter$cov[, , idxuse, drop = FALSE]
+   
     best_iter$cluster <- as.vector(best_iter$cluster)
+    best_iter$cluster <- ClusterIDs[best_iter$cluster + 1]
+    
     best_iter$size <- as.vector(best_iter$size)
+    best_iter$size <- best_iter$size[idxuse]
     best_iter$weights <- as.vector(best_iter$weights)
+    best_iter$weights <- best_iter$weights[idxuse]
      
     ret <- c(best_iter, list(cluster.ini=matrix(unlist(cluster.ini), byrow=TRUE, nrow=length(cluster.ini)),
         obj.ini=obj.ini, int=int, par=parlist, k=sum(best_iter$size > 0)))

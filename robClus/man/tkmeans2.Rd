@@ -72,6 +72,11 @@ when setting this parameter to \code{FALSE}.}
 
 \item{trace}{Defines the tracing level, which is set to 0 by default. Tracing level 1 
 gives additional information on the stage of the iterative process.}
+
+\item{drop.empty.clust}{Logical value specifying, whether empty clusters shall be 
+omitted in the resulting object. (The result structure does not contain center 
+estimates of empty clusters anymore. Cluster names are reassigned 
+such that the first l clusters (l <= k) always have at least one observation.}
 }
 \value{
 The function returns the following values:
